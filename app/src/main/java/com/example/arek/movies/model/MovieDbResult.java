@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Result {
+public class MovieDbResult {
 
     @SerializedName("page")
     private Long page;
