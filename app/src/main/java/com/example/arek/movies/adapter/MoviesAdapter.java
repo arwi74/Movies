@@ -38,6 +38,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.id.setText(mResult.getMovies().get(position).getTitle());
     }
 
+    public void swap(MovieDbResult result){
+        if ( result != null ) {
+            mResult = result;
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
     public int getItemCount() {
         if ( mResult != null )
