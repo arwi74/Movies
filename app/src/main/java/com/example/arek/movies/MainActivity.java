@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
-    private MovieDbResult mResult;
 
     private final static String THE_MOVIE_DB_API_KEY = BuildConfig.THE_MOVIE_DB_API_KEY;
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(mCallback);
 
 
-        mAdapter = new MoviesAdapter(mResult);
+        mAdapter = new MoviesAdapter(null);
 
         mRecycler = mBinding.content.recyclerView;
         mRecycler.setAdapter(mAdapter);
@@ -70,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
         public void onResponse(Call<MovieDbResult> call, Response<MovieDbResult> response) {
             Log.d("**",response.toString());
             if (response.isSuccessful()){
-                mResult = response.body();
-                List<Movie> movies = mResult.getMovies();
+                MovieDbResult result = response.body();
+                List<Movie> movies = result.getMovies();
                 Log.d("**","start");
                 for(Movie movie:movies){
                     Log.d("**",movie.getTitle());
                 }
                 Log.d("**","stop");
-                mAdapter.swap(mResult);
+                mAdapter.swap(result);
             }
         }
 

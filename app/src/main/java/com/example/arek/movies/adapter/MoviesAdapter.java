@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.MovieDbResult;
 
@@ -36,6 +37,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.id.setText(mResult.getMovies().get(position).getTitle());
+
+        Glide.with(holder.itemView)
+
+                .load("http://image.tmdb.org/t/p/w185/"+mResult.getMovies().get(position).getPosterPath())
+
+                .into(holder.poster);
+
     }
 
     public void swap(MovieDbResult result){
