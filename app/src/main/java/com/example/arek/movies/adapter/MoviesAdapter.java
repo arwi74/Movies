@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.MovieDbResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.zip.Inflater;
 
@@ -39,10 +40,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.id.setText(mResult.getMovies().get(position).getTitle());
 
         Glide.with(holder.itemView)
-
                 .load("http://image.tmdb.org/t/p/w185/"+mResult.getMovies().get(position).getPosterPath())
-
                 .into(holder.poster);
+
 
     }
 

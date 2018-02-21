@@ -7,6 +7,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.example.arek.movies.adapter.MoviesAdapter;
 import com.example.arek.movies.api.ApiClient;
@@ -14,23 +17,22 @@ import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityMainBinding;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.model.MovieDbResult;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
+
+    public static final int DISPLAY_MODE_POPULAR = 0;
+    public static final int DISPLAY_MODE_TOP_RATED = 1;
+    public int mDisplayMode = DISPLAY_MODE_POPULAR;
 
     private final static String THE_MOVIE_DB_API_KEY = BuildConfig.THE_MOVIE_DB_API_KEY;
 
@@ -42,15 +44,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = mBinding.toolbar;
 
 
-        MovieDbApi movieDbApi = ApiClient.getInstance();
 
-        Call<MovieDbResult> call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY);
-        call.enqueue(mCallback);
+
+
+        loadMovies( mDisplayMode );
 
 
         mAdapter = new MoviesAdapter(null);
 
         mRecycler = mBinding.content.recyclerView;
+        mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
         mRecycler.setLayoutManager(new GridLayoutManager(this,3));
 
@@ -61,6 +64,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void loadMovies(int displayMode){
+        MovieDbApi movieDbApi = ApiClient.getInstance();
+        Call<MovieDbResult> call;
+        if ( displayMode == DISPLAY_MODE_POPULAR ){
+            call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY,1);
+            call.enqueue(mCallback);
+        }else if ( displayMode == DISPLAY_MODE_TOP_RATED ){
+            call = movieDbApi.getMoviesTopRated(THE_MOVIE_DB_API_KEY,1);
+            call.enqueue(mCallback);
+        }
+
+    }
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuItem = item.getItemId();
+        switch (menuItem){
+            case R.id.action_menu_popular:
+                mDisplayMode = DISPLAY_MODE_POPULAR;
+                break;
+            case R.id.action_menu_top_rated:
+                mDisplayMode = DISPLAY_MODE_TOP_RATED;
+                break;
+
+        }
+        loadMovies(mDisplayMode);
+        return super.onOptionsItemSelected(item);
+    }
 
 
 

@@ -14,8 +14,8 @@ public interface MovieDbApi {
     String BASE_URL = "https://api.themoviedb.org/";
 
     @GET("/3/movie/popular")
-    Call<MovieDbResult> getMoviesPopular(@Query("api_key")String apiKey);
+    Call<MovieDbResult> getMoviesPopular(@Query("api_key")String apiKey,@Query("page")int page);
 
     @GET("/3/movie/top_rated")
-    Call<MovieDbResult> getMoviesTopRated(@Query("api_key")String apiKey);
+    Call<MovieDbResult> getMoviesTopRated(@Query("api_key")String apiKey,@Query("page")int page);
 }
