@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
+import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.model.MovieDbResult;
 import com.squareup.picasso.Picasso;
 
@@ -21,11 +22,16 @@ import java.util.zip.Inflater;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
     MovieDbResult mResult;
+    MoviesAdapterOnClickHandler mOnClickHandler;
 
-    public MoviesAdapter(MovieDbResult result){
+    public MoviesAdapter(MovieDbResult result,MoviesAdapterOnClickHandler onClickHandler){
         mResult = result;
+        mOnClickHandler = onClickHandler;
     }
 
+    public interface MoviesAdapterOnClickHandler{
+        public void onMovieClick(Movie movie);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,13 +67,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView poster;
         TextView id;
         public ViewHolder(View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.item_poster);
             id = itemView.findViewById(R.id.item_id);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Movie movie = mResult.getMovies().get(position);
+            mOnClickHandler.onMovieClick(movie);
         }
     }
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.arek.movies.adapter.MoviesAdapter;
 import com.example.arek.movies.api.ApiClient;
@@ -24,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler {
 
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         loadMovies( mDisplayMode );
 
 
-        mAdapter = new MoviesAdapter(null);
+        mAdapter = new MoviesAdapter(null,this);
 
         mRecycler = mBinding.content.recyclerView;
         mRecycler.setHasFixedSize(true);
@@ -126,4 +127,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onMovieClick(Movie movie) {
+        Toast.makeText(this,movie.getTitle(),Toast.LENGTH_LONG).show();
+    }
 }
