@@ -1,5 +1,6 @@
 package com.example.arek.movies;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public static final int DISPLAY_MODE_POPULAR = 0;
     public static final int DISPLAY_MODE_TOP_RATED = 1;
     public int mDisplayMode = DISPLAY_MODE_POPULAR;
+
+    public static final String EXTRA_DETAIL_MOVIE = "detail_movie";
 
     private final static String THE_MOVIE_DB_API_KEY = BuildConfig.THE_MOVIE_DB_API_KEY;
 
@@ -104,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
 
+    private void openDetail(Movie movie) {
+        Intent intent = new Intent(this,DetailActivity.class);
+        intent.putExtra(EXTRA_DETAIL_MOVIE,movie);
+        startActivity(intent);
+    }
+
 
     Callback<MovieDbResult> mCallback = new Callback<MovieDbResult>() {
         @Override
@@ -130,5 +139,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     public void onMovieClick(Movie movie) {
         Toast.makeText(this,movie.getTitle(),Toast.LENGTH_LONG).show();
+        openDetail(movie);
     }
+
 }

@@ -16,8 +16,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildTypes.each{
-        it.buildConfigField("String","THE_MOVIE_DB_API_KEY",TheMovieDbApiKey)
+    buildTypes.each {
+        it.buildConfigField("String", "THE_MOVIE_DB_API_KEY", TheMovieDbApiKey)
     }
     dataBinding {
         enabled = true

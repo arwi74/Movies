@@ -1,13 +1,18 @@
 
 package com.example.arek.movies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Movie {
+public class Movie implements Parcelable{
 
     @SerializedName("adult")
     private Boolean adult;
@@ -150,4 +155,66 @@ public class Movie {
         this.voteCount = voteCount;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public Movie(Parcel in){
+        boolean[] byteArray = new boolean[2];
+        in.readBooleanArray(byteArray);
+        adult = byteArray[0];
+        video = byteArray[1];
+        backdropPath = in.readString();
+        originalLanguage = in.readString();
+        originalTitle = in.readString();
+        overview = in.readString();
+        posterPath = in.readString();
+        releaseDate = in.readString();
+        title = in.readString();
+
+        Id = in.readLong();
+        voteCount = in.readLong();
+
+        popularity = in.readDouble();
+        voteAverage = in.readDouble();
+        List<Long> list = new ArrayList<>();
+        in.readList(list,Long.class.getClassLoader());
+        genreIds = list;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeBooleanArray(new boolean[]{adult,video});
+
+        dest.writeString(backdropPath);
+        dest.writeString(originalLanguage);
+        dest.writeString(originalTitle);
+        dest.writeString(overview);
+        dest.writeString(posterPath);
+        dest.writeString(releaseDate);
+        dest.writeString(title);
+
+        dest.writeLong(Id);
+        dest.writeLong(voteCount);
+
+        dest.writeDouble(popularity);
+        dest.writeDouble(voteAverage);
+
+        dest.writeList(genreIds);
+
+    }
+
+    public static final Parcelable.Creator CREATOR =new  Parcelable.Creator(){
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            Log.d("PARCELABLE","CREATOR");
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[0];
+        }
+    };
 }
