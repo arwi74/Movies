@@ -2,9 +2,11 @@ package com.example.arek.movies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import java.util.zip.Inflater;
  */
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+    private static final String LOG_TAG = MoviesAdapter.class.getSimpleName();
     MovieDbResult mResult;
     MoviesAdapterOnClickHandler mOnClickHandler;
 
@@ -44,6 +47,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.id.setText(mResult.getMovies().get(position).getTitle());
+
 
         Glide.with(holder.itemView)
                 .load("http://image.tmdb.org/t/p/w185/"+mResult.getMovies().get(position).getPosterPath())
@@ -75,6 +79,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             poster = itemView.findViewById(R.id.item_poster);
             id = itemView.findViewById(R.id.item_id);
             itemView.setOnClickListener(this);
+
+//            ViewTreeObserver vto = poster.getViewTreeObserver();
+//            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                public boolean onPreDraw() {
+//                    poster.getViewTreeObserver().removeOnPreDrawListener(this);
+//
+//                    int width = poster.getMeasuredWidth();
+//
+//                    int height = (int) (width * 1.5)+2;
+//                    Log.d(LOG_TAG, "width=" + width + " height=" + height);
+//                    poster.getLayoutParams().height = height;
+//                    return true;
+//                } });
+
         }
 
         @Override

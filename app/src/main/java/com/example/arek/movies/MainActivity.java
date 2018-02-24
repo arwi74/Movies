@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -68,8 +69,19 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     }
 
+    public void showProgressBar(){
+        mBinding.content.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar(){
+        mBinding.content.progressBar.setVisibility(View.GONE);
+    }
+
+
+
     public void loadMovies(int displayMode){
-        MovieDbApi movieDbApi = ApiClient.getInstance();
+        showProgressBar();
+        MovieDbApi movieDbApi = ApiClient.getInstance(this);
         Call<MovieDbResult> call;
         if ( displayMode == DISPLAY_MODE_POPULAR ){
             call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY,1);
@@ -126,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                     Log.d("**",movie.getTitle());
                 }
                 Log.d("**","stop");
+                hideProgressBar();
                 mAdapter.swap(result);
+                mAdapter.notifyDataSetChanged();
             }
         }
 
