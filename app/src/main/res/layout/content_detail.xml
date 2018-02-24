@@ -59,7 +59,6 @@
             android:layout_marginTop="@dimen/detail_margin_top"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/poster"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

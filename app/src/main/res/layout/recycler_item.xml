@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     >
 
-    <ImageView
+    <com.example.arek.movies.utils.ImageViewWithAspectRatio
         android:id="@+id/item_poster"
         android:layout_width="match_parent"
+        tool:layout_height="200dp"
         android:layout_height="wrap_content"
-        android:minHeight="80dp"
 
+        android:minHeight="80dp"
+        app:AspectRatio="0.667"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
       />
 
     <TextView
         android:id="@+id/item_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="visible"
+        tool:text="Piękny i bestia"
+        android:textColor="@android:color/white"
+        android:background="@color/transparentBlack"
+        />
+
+    <TextView
+        android:id="@+id/item_id1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"/>
+        android:layout_gravity="top|right"
+        android:visibility="visible"
+        android:text="6.6"
+        android:background="@color/colorPrimary"
+        />
 
 </FrameLayout>

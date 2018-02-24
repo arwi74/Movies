@@ -13,10 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
-import com.example.arek.movies.model.MovieDbResult;
-import com.squareup.picasso.Picasso;
 
-import java.util.zip.Inflater;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Arkadiusz Wilczek on 19.02.18.
@@ -24,12 +23,13 @@ import java.util.zip.Inflater;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
     private static final String LOG_TAG = MoviesAdapter.class.getSimpleName();
-    MovieDbResult mResult;
+    private List<Movie> mMovies;
     MoviesAdapterOnClickHandler mOnClickHandler;
+    private int mCalculatedHeight;
 
-    public MoviesAdapter(MovieDbResult result,MoviesAdapterOnClickHandler onClickHandler){
-        mResult = result;
+    public MoviesAdapter(List<Movie> movies,MoviesAdapterOnClickHandler onClickHandler){
         mOnClickHandler = onClickHandler;
+        mMovies = movies;
     }
 
     public interface MoviesAdapterOnClickHandler{
@@ -46,27 +46,33 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.id.setText(mResult.getMovies().get(position).getTitle());
+        holder.id.setText(mMovies.get(position).getTitle());
 
 
         Glide.with(holder.itemView)
-                .load("http://image.tmdb.org/t/p/w185/"+mResult.getMovies().get(position).getPosterPath())
+                .load("http://image.tmdb.org/t/p/w185/"+ mMovies.get(position).getPosterPath())
                 .into(holder.poster);
 
 
     }
 
-    public void swap(MovieDbResult result){
-        if ( result != null ) {
-            mResult = result;
+    public void swap(List<Movie> movies){
+        if ( movies == null ) return;
+            mMovies.clear();
+            mMovies.addAll(movies);
             notifyDataSetChanged();
-        }
+    }
+
+    public void addMovies(List<Movie> movies){
+            if ( movies == null ) return;
+            mMovies.addAll(movies);
+            notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if ( mResult != null )
-            return mResult.getMovies().size();
+        if ( mMovies != null )
+            return mMovies.size();
         return 0;
     }
 
@@ -74,32 +80,44 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView poster;
         TextView id;
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.item_poster);
             id = itemView.findViewById(R.id.item_id);
             itemView.setOnClickListener(this);
 
-//            ViewTreeObserver vto = poster.getViewTreeObserver();
-//            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//                public boolean onPreDraw() {
-//                    poster.getViewTreeObserver().removeOnPreDrawListener(this);
-//
-//                    int width = poster.getMeasuredWidth();
-//
-//                    int height = (int) (width * 1.5)+2;
-//                    Log.d(LOG_TAG, "width=" + width + " height=" + height);
-//                    poster.getLayoutParams().height = height;
-//                    return true;
-//                } });
+//            if ( mCalculatedHeight==0 ){
+//                calculateHeight(poster);
+//            } else {
+//                poster.getLayoutParams().height = mCalculatedHeight;
+//            }
+        }
+
+        private void calculateHeight(final ImageView poster){
+            ViewTreeObserver vto = poster.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    poster.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                    int width = poster.getMeasuredWidth();
+
+                    int height = (int) (width * 1.5)+2;
+                    Log.d(LOG_TAG, "width=" + width + " height=" + height);
+                    poster.getLayoutParams().height = height;
+                    mCalculatedHeight = height;
+                    return true;
+                } });
 
         }
+
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Movie movie = mResult.getMovies().get(position);
+            Movie movie = mMovies.get(position);
             mOnClickHandler.onMovieClick(movie);
         }
     }
+
+
 }
