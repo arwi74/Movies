@@ -10,7 +10,7 @@
     <com.example.arek.movies.utils.ImageViewWithAspectRatio
         android:id="@+id/item_poster"
         android:layout_width="match_parent"
-        tool:layout_height="200dp"
+        tool:layout_height="300dp"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/recycler_item_image_min_height"
         app:AspectRatio="0.667"

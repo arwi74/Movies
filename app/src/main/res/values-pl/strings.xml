@@ -7,11 +7,11 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="detail_release_date_label">Release date</string>
-    <string name="detail_vote_avarge_label">Vote avarge</string>
+    <string name="detail_release_date_label">Data wydania</string>
+    <string name="detail_vote_avarge_label">Średnia ocena</string>
 
     <string name="mainActivityTitle">Movies</string>
-    <string name="main_activity_title_popular">popular</string>
-    <string name="main_activity_title_top_rated">top rated</string>
-    <string name="load_error_message">Ups, we have problem with load data...</string>
+    <string name="main_activity_title_popular">popularne</string>
+    <string name="main_activity_title_top_rated">najwyżej oceniane</string>
+    <string name="load_error_message">Ups, mamy problem z załadowaniem danych...</string>
 </resources>

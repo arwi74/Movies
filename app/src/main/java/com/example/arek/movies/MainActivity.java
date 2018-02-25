@@ -22,6 +22,7 @@ import com.example.arek.movies.model.MovieDbResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         loadMovies();
 
 
-        mAdapter = new MoviesAdapter(mMovies,this);
+        mAdapter = new MoviesAdapter(mMovies, this);
 
         mRecycler = mBinding.content.recyclerView;
         mRecycler.setHasFixedSize(true);
@@ -135,10 +136,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private void loadMoviesPage(int displayMode,int page){
         MovieDbApi movieDbApi = ApiClient.getInstance(this);
         Call<MovieDbResult> call;
+        String language = Locale.getDefault().getLanguage();
+        Log.d(LOG_TAG,language);
         if ( displayMode == SORT_MODE_POPULAR){
-            call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY, page);
+            call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY, page, language);
         }else{
-            call = movieDbApi.getMoviesTopRated(THE_MOVIE_DB_API_KEY, page);
+            call = movieDbApi.getMoviesTopRated(THE_MOVIE_DB_API_KEY, page, language);
         }
         call.enqueue(mCallback);
     }
@@ -192,16 +195,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         hideProgressBar();
         if ( mNotifyChanges ) {
             mAdapter.swap(movies);
-          //  mAdapter.notifyDataSetChanged();
             mRecycler.scrollToPosition(1);
         }else{
             mAdapter.addMovies(movies);
         }
-
-        Log.d(LOG_TAG,"Notify data set");
-    //    mAdapter.notifyDataSetChanged();
-
-      //  if (mPage<3) loadMoreMovies();
     }
 
 
@@ -214,14 +211,23 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                 List<Movie> movies = result.getMovies();
                         //mAdapter.notifyDataSetChanged();
                 showMovies(movies);
+            } else{
+                showLoadErrorMessage();
             }
         }
 
         @Override
         public void onFailure(Call<MovieDbResult> call, Throwable t) {
+            showLoadErrorMessage();
             t.printStackTrace();
         }
     };
+
+    public void showLoadErrorMessage() {
+        Log.d(LOG_TAG,"error message");
+        Toast.makeText(this,getString(R.string.load_error_message),Toast.LENGTH_LONG).show();
+        hideProgressBar();
+    }
 
     @Override
     public void onMovieClick(Movie movie) {
