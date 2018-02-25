@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
+    android:padding="1dp"
     >
 
     <com.example.arek.movies.utils.ImageViewWithAspectRatio
@@ -11,32 +12,38 @@
         android:layout_width="match_parent"
         tool:layout_height="200dp"
         android:layout_height="wrap_content"
-
-        android:minHeight="80dp"
+        android:minHeight="@dimen/recycler_item_image_min_height"
         app:AspectRatio="0.667"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
       />
 
     <TextView
-        android:id="@+id/item_id"
+        android:id="@+id/item_movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/recycler_item_title_min_height"
         android:layout_gravity="bottom"
+        android:gravity="bottom"
         android:visibility="visible"
+        android:padding="@dimen/recycler_item_title_padding"
         tool:text="Piękny i bestia"
         android:textColor="@android:color/white"
-        android:background="@color/transparentBlack"
+        android:background="@drawable/gradient_background"
         />
 
     <TextView
-        android:id="@+id/item_id1"
+        android:id="@+id/item_movie_vote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
+        android:layout_margin="@dimen/recycler_item_vote_margin"
         android:visibility="visible"
-        android:text="6.6"
-        android:background="@color/colorPrimary"
+        android:textSize="@dimen/item_movie_vote_text_size"
+        android:textStyle="bold"
+        tool:text="6.6"
+        android:padding="@dimen/recycler_item_vote_padding"
+        android:background="@drawable/gradient_circle"
         />
 
 </FrameLayout>

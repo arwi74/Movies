@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,14 +45,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.id.setText(mMovies.get(position).getTitle());
+        Movie movie = mMovies.get(position);
 
+        holder.title.setText( movie.getTitle() );
+        holder.vote.setText( Double.toString(movie.getVoteAverage()) );
 
         Glide.with(holder.itemView)
                 .load("http://image.tmdb.org/t/p/w185/"+ mMovies.get(position).getPosterPath())
                 .into(holder.poster);
-
-
     }
 
     public void swap(List<Movie> movies){
@@ -79,11 +78,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView poster;
-        TextView id;
+        TextView title;
+        TextView vote;
         public ViewHolder(final View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.item_poster);
-            id = itemView.findViewById(R.id.item_id);
+            title = itemView.findViewById(R.id.item_movie_title);
+            vote = itemView.findViewById(R.id.item_movie_vote);
             itemView.setOnClickListener(this);
 
 //            if ( mCalculatedHeight==0 ){

@@ -178,13 +178,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         hideProgressBar();
         if ( mNotifyChanges ) {
             mAdapter.swap(movies);
-            mAdapter.notifyDataSetChanged();
+          //  mAdapter.notifyDataSetChanged();
+            mRecycler.scrollToPosition(1);
         }else{
             mAdapter.addMovies(movies);
         }
 
         Log.d(LOG_TAG,"Notify data set");
-        mAdapter.notifyDataSetChanged();
+    //    mAdapter.notifyDataSetChanged();
 
       //  if (mPage<3) loadMoreMovies();
     }
