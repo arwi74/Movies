@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private List<Movie> mMovies = new ArrayList<>();
 
 
-    public static final int DISPLAY_MODE_POPULAR = 0;
-    public static final int DISPLAY_MODE_TOP_RATED = 1;
-    public int mDisplayMode = DISPLAY_MODE_POPULAR;
+    public static final int SORT_MODE_POPULAR = 0;
+    public static final int SORT_MODE_TOP_RATED = 1;
+    public int mSortMode = SORT_MODE_POPULAR;
     private int mPage = 1;
     private boolean mNotifyChanges = false;
     private boolean mLoading = false;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     public void showTitle(){
-        if ( mDisplayMode ==  DISPLAY_MODE_POPULAR ){
+        if ( mSortMode == SORT_MODE_POPULAR){
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_popular));
         }else{
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_top_rated));
@@ -119,14 +119,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public void loadMovies(){
         mPage=1;
         showProgressBar();
-        loadMoviesPage(mDisplayMode,mPage);
+        loadMoviesPage(mSortMode,mPage);
         mNotifyChanges = true;
     }
 
     public void loadMoreMovies(){
         showProgressBar();
         mPage++;
-        loadMoviesPage(mDisplayMode,mPage);
+        loadMoviesPage(mSortMode,mPage);
         mNotifyChanges = false;
     }
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private void loadMoviesPage(int displayMode,int page){
         MovieDbApi movieDbApi = ApiClient.getInstance(this);
         Call<MovieDbResult> call;
-        if ( displayMode == DISPLAY_MODE_POPULAR ){
+        if ( displayMode == SORT_MODE_POPULAR){
             call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY, page);
         }else{
             call = movieDbApi.getMoviesTopRated(THE_MOVIE_DB_API_KEY, page);
@@ -146,26 +146,40 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);
+        MenuItem itemSort = menu.findItem(R.id.action_menu_popular_top_rated);
+        setOptionSortIcon(itemSort);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItem = item.getItemId();
-        switch (menuItem){
-            case R.id.action_menu_popular:
-                mDisplayMode = DISPLAY_MODE_POPULAR;
-                break;
-            case R.id.action_menu_top_rated:
-                mDisplayMode = DISPLAY_MODE_TOP_RATED;
-                break;
 
+        if ( menuItem == R.id.action_menu_popular_top_rated) {
+            switchSortMode();
+            setOptionSortIcon(item);
+            loadMovies();
+            showTitle();
         }
-        loadMovies();
-        showTitle();
         return super.onOptionsItemSelected(item);
     }
 
+    private void switchSortMode(){
+        if ( mSortMode == SORT_MODE_POPULAR )
+            mSortMode=SORT_MODE_TOP_RATED;
+        else
+            mSortMode=SORT_MODE_POPULAR;
+    }
+
+
+    private void setOptionSortIcon(MenuItem item){
+        if ( mSortMode == SORT_MODE_POPULAR ) {
+            item.setIcon(R.drawable.ic_star_half_white_24dp);
+        }else {
+            item.setIcon(R.drawable.ic_star_white_24dp);
+        }
+
+    }
 
     private void openDetailActivity(Movie movie) {
         Intent intent = new Intent(this,DetailActivity.class);
