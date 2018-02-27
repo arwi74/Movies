@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
+    @SuppressWarnings("WeakerAccess")
     @Inject public MovieDbApi movieDbApi;
 
     private static final int SORT_MODE_POPULAR = 0;
@@ -133,9 +134,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         Call<MovieDbResult> call;
         String language = Locale.getDefault().getLanguage();
         if ( displayMode == SORT_MODE_POPULAR){
-            call = movieDbApi.getMoviesPopular(BuildConfig.THE_MOVIE_DB_API_KEY, page, language);
+            call = movieDbApi.getMoviesPopular(page, language);
         }else{
-            call = movieDbApi.getMoviesTopRated(BuildConfig.THE_MOVIE_DB_API_KEY, page, language);
+            call = movieDbApi.getMoviesTopRated(page, language);
         }
         call.enqueue(mCallback);
     }

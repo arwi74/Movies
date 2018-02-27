@@ -16,13 +16,11 @@ public interface MovieDbApi {
 
     @GET("/3/movie/popular")
     Call<MovieDbResult> getMoviesPopular(
-            @Query("api_key")String apiKey,
             @Query("page")int page,
             @Query("language")String language);
 
     @GET("/3/movie/top_rated")
     Call<MovieDbResult> getMoviesTopRated(
-            @Query("api_key")String apiKey,
             @Query("page")int page,
             @Query("language")String language);
 

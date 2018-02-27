@@ -11,6 +11,7 @@ import com.example.arek.movies.api.NetModule;
  * dagger module for provide movieDbApi retrofit client
  */
 
+@SuppressWarnings("WeakerAccess")
 public class MoviesApp extends Application {
     private NetComponent mNetComponent;
 

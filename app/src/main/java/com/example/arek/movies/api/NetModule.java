@@ -1,16 +1,24 @@
 package com.example.arek.movies.api;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
+import com.example.arek.movies.BuildConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -40,6 +48,23 @@ public class NetModule {
     OkHttpClient provideOkHttpClient(Cache cache){
         return new OkHttpClient.Builder()
                 .cache(cache)
+                .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(@NonNull Chain chain) throws IOException {
+                            Request request = chain.request();
+                            HttpUrl httpUrl = request.url();
+
+                            HttpUrl  newUrl = httpUrl.newBuilder()
+                                    .addQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_KEY)
+                                    .build();
+
+                            Request.Builder requestBuilder = request.newBuilder()
+                                    .url(newUrl);
+
+                            Request newRequest = requestBuilder.build();
+                            return chain.proceed(newRequest);
+                    }
+                })
                 .build();
     }
 
