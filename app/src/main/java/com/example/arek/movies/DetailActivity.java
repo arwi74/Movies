@@ -2,15 +2,15 @@ package com.example.arek.movies;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
-import com.bumptech.glide.Glide;
 import com.example.arek.movies.databinding.ActivityDetailBinding;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
 
 import java.util.Locale;
@@ -53,19 +53,20 @@ public class DetailActivity extends AppCompatActivity {
         mBinding.content.detailVoteAverage.setText(String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
         mBinding.content.releaseDate.setText(movie.getReleaseDate());
 
-        Glide.with(this)
-                .load(UtilsImage.buildImagePath(
-                        UtilsImage.SIZE_W185,
-                        movie.getPosterPath())
-                )
+        Uri posterUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W185, movie.getPosterPath());
+        Uri backdropUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W500, movie.getBackdropPath());
+
+
+        GlideApp.with(this)
+                .load(posterUri)
+                .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(mBinding.content.detailPoster);
 
-        Glide.with(this)
-                .load(UtilsImage.buildImagePath(
-                        UtilsImage.SIZE_W500,
-                        movie.getBackdropPath())
-                )
+        GlideApp.with(this)
+                .load(backdropUri)
+                .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(mBinding.toolbarImage);
+
 
     }
 

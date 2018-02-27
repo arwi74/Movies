@@ -1,6 +1,7 @@
 package com.example.arek.movies.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
 
 import java.util.List;
@@ -53,10 +54,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Log.d(LOG_TAG, UtilsImage.buildImagePath(
                 UtilsImage.SIZE_W185,
                 mMovies.get(position).getPosterPath()).toString());
-        Glide.with(holder.itemView)
-                .load( UtilsImage.buildImagePath(
-                                UtilsImage.SIZE_W185,
-                                mMovies.get(position).getPosterPath()))
+
+        Uri posterUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W185, mMovies.get(position).getPosterPath());
+
+        GlideApp.with(holder.itemView)
+                .load(posterUri)
+                .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(holder.poster);
     }
 
