@@ -17,7 +17,6 @@ import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding mBinding;
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
