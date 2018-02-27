@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.utils.ApiImageUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -49,9 +50,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.title.setText( movie.getTitle() );
         holder.vote.setText( String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
 
-        Glide.with(holder.itemView)
-                .load("http://image.tmdb.org/t/p/w185/"+ mMovies.get(position).getPosterPath())
-                .into(holder.poster);
+//        Glide.with(holder.itemView)
+//                .load( ApiImageUtils.getImagePath(
+//                                ApiImageUtils.SIZE_W185,
+//                                mMovies.get(position).getPosterPath()))
+//                .into(holder.poster);
     }
 
     public void swap(List<Movie> movies){
