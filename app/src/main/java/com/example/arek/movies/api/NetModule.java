@@ -1,10 +1,14 @@
 package com.example.arek.movies.api;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -12,22 +16,44 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Arkadiusz Wilczek on 20.02.18.
- * Api client
+ * Use dagger to provide retrofit client
  */
 
-public class ApiClient {
+@Module
+public class NetModule {
+    private final Application mApp;
 
-    public static MovieDbApi getInstance(Context context){
+    public NetModule(Application app){
+        mApp = app;
+    }
+
+    @Provides
+    @Singleton
+    Cache ProvideOkHttpCache(){
         int cacheSize = 10 * 1024 * 1024; //10MB
-        Cache  cache = new Cache(context.getCacheDir(), cacheSize);
+        return new Cache(mApp.getCacheDir(), cacheSize);
+    }
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient(Cache cache){
+        return new OkHttpClient.Builder()
                 .cache(cache)
                 .build();
+    }
 
-        Gson gson = new GsonBuilder()
+    @Provides
+    @Singleton
+    Gson provideGson(){
+        return new GsonBuilder()
                 .setLenient()
                 .create();
+    }
+
+    @Provides
+    @Singleton
+    MovieDbApi provideRetrofitApiClient(Gson gson, OkHttpClient okHttpClient){
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MovieDbApi.BASE_URL)

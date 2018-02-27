@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.arek.movies.adapter.MoviesAdapter;
-import com.example.arek.movies.api.ApiClient;
 import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityMainBinding;
 import com.example.arek.movies.model.Movie;
@@ -24,6 +23,8 @@ import com.example.arek.movies.model.MovieDbResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
-
+    @Inject private MovieDbApi movieDbApi;
 
     private static final int SORT_MODE_POPULAR = 0;
     private static final int SORT_MODE_TOP_RATED = 1;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         Toolbar toolbar = mBinding.toolbar;
         showTitle();
 
-
+        ((MoviesApp) getApplication()).getNetComponent().inject(this);
 
 
         loadMovies();
@@ -113,13 +114,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     private void loadMovies(){
         mPage=1;
-        showProgressBar();
         loadMoviesPage(mSortMode,mPage);
         mSwapData = true;
     }
 
     private void loadMoreMovies(){
-        showProgressBar();
         mPage++;
         loadMoviesPage(mSortMode,mPage);
         mSwapData = false;
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
 
     private void loadMoviesPage(int displayMode,int page){
-        MovieDbApi movieDbApi = ApiClient.getInstance(this);
+        showProgressBar();
         Call<MovieDbResult> call;
         String language = Locale.getDefault().getLanguage();
         if ( displayMode == SORT_MODE_POPULAR){
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private final Callback<MovieDbResult> mCallback = new Callback<MovieDbResult>() {
         @Override
         public void onResponse(@NonNull Call<MovieDbResult> call,@NonNull Response<MovieDbResult> response) {
-            Log.d("**",response.toString());
+            Log.d(LOG_TAG,response.toString());
             if (response.isSuccessful()){
                 MovieDbResult result = response.body();
 
