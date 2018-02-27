@@ -2,6 +2,7 @@ package com.example.arek.movies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
-import com.example.arek.movies.utils.ApiImageUtils;
+import com.example.arek.movies.utils.UtilsImage;
 
 import java.util.List;
 import java.util.Locale;
@@ -49,12 +50,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
         holder.title.setText( movie.getTitle() );
         holder.vote.setText( String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
-
-//        Glide.with(holder.itemView)
-//                .load( ApiImageUtils.getImagePath(
-//                                ApiImageUtils.SIZE_W185,
-//                                mMovies.get(position).getPosterPath()))
-//                .into(holder.poster);
+        Log.d(LOG_TAG, UtilsImage.buildImagePath(
+                UtilsImage.SIZE_W185,
+                mMovies.get(position).getPosterPath()).toString());
+        Glide.with(holder.itemView)
+                .load( UtilsImage.buildImagePath(
+                                UtilsImage.SIZE_W185,
+                                mMovies.get(position).getPosterPath()))
+                .into(holder.poster);
     }
 
     public void swap(List<Movie> movies){

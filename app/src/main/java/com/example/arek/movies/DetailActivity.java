@@ -11,6 +11,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.example.arek.movies.databinding.ActivityDetailBinding;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.utils.UtilsImage;
 
 import java.util.Locale;
 
@@ -54,15 +55,19 @@ public class DetailActivity extends AppCompatActivity {
         mBinding.content.releaseDate.setText(movie.getReleaseDate());
 
         Glide.with(this)
-                .load("http://image.tmdb.org/t/p/w185/"+movie.getPosterPath())
+                .load(UtilsImage.buildImagePath(
+                        UtilsImage.SIZE_W185,
+                        movie.getPosterPath())
+                )
                 .into(mBinding.content.detailPoster);
 
         Glide.with(this)
-                .load("http://image.tmdb.org/t/p/w500/"+movie.getBackdropPath())
+                .load(UtilsImage.buildImagePath(
+                        UtilsImage.SIZE_W500,
+                        movie.getBackdropPath())
+                )
                 .into(mBinding.toolbarImage);
 
-        Log.d(LOG_TAG,"http://image.tmdb.org/t/p/w185/"+movie.getPosterPath());
-        Log.d(LOG_TAG,"http://image.tmdb.org/t/p/w185/"+movie.getBackdropPath());
     }
 
 

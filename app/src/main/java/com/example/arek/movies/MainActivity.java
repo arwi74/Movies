@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
-    @Inject private MovieDbApi movieDbApi;
+    @Inject public MovieDbApi movieDbApi;
 
     private static final int SORT_MODE_POPULAR = 0;
     private static final int SORT_MODE_TOP_RATED = 1;
@@ -63,10 +63,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
 
+        int numRows = getResources().getInteger(R.integer.numRows);
+
         mRecycler = mBinding.content.recyclerView;
         mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
-        mRecycler.setLayoutManager(new GridLayoutManager(this,2));
+        mRecycler.setLayoutManager(new GridLayoutManager(this, numRows));
 
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
