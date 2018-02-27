@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"
-                    android:textSize="23dp"
+                    android:textSize="23sp"
                     android:text="@string/mainActivityTitle"/>
 
                 <TextView

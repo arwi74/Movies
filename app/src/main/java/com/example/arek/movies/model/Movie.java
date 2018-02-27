@@ -3,15 +3,12 @@ package com.example.arek.movies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
-@Generated("net.hexar.json2pojo")
-@SuppressWarnings("unused")
+
 public class Movie implements Parcelable{
 
     @SerializedName("adult")
@@ -160,7 +157,7 @@ public class Movie implements Parcelable{
         return 0;
     }
 
-    public Movie(Parcel in){
+    private Movie(Parcel in){
         boolean[] byteArray = new boolean[2];
         in.readBooleanArray(byteArray);
         adult = byteArray[0];
@@ -202,13 +199,11 @@ public class Movie implements Parcelable{
         dest.writeDouble(voteAverage);
 
         dest.writeList(genreIds);
-
     }
 
     public static final Parcelable.Creator CREATOR =new  Parcelable.Creator(){
         @Override
         public Movie createFromParcel(Parcel source) {
-            Log.d("PARCELABLE","CREATOR");
             return new Movie(source);
         }
 

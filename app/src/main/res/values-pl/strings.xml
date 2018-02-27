@@ -1,17 +1,17 @@
 <resources>
     <string name="app_name">Movies</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="main_menu_popular">Popular</string>
-    <string name="main_menu_top_rated">Top rated</string>
-    <string name="title_activity_detail">DetailActivity</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="main_menu_popular">Popular</string>
 
     <string name="detail_release_date_label">Data wydania</string>
-    <string name="detail_vote_avarge_label">Średnia ocena</string>
+    <string name="detail_vote_average_label">Średnia ocena</string>
 
     <string name="mainActivityTitle">Movies</string>
     <string name="main_activity_title_popular">popularne</string>
     <string name="main_activity_title_top_rated">najwyżej oceniane</string>
-    <string name="load_error_message">Ups, mamy problem z załadowaniem danych...</string>
+    <string name="load_error_message">Ups, mamy problem z załadowaniem danych</string>
+
+    <string name="detail_backdrop_description">Scena z filmu</string>
+    <string name="detail_poster_description">Plakat filmu</string>
+
 </resources>

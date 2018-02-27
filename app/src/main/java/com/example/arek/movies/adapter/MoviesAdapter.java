@@ -2,11 +2,9 @@ package com.example.arek.movies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,16 +13,17 @@ import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Arkadiusz Wilczek on 19.02.18.
+ * adapter for displaying movie posters
  */
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
     private static final String LOG_TAG = MoviesAdapter.class.getSimpleName();
-    private List<Movie> mMovies;
-    MoviesAdapterOnClickHandler mOnClickHandler;
-    private int mCalculatedHeight;
+    private final List<Movie> mMovies;
+    private final MoviesAdapterOnClickHandler mOnClickHandler;
 
     public MoviesAdapter(List<Movie> movies,MoviesAdapterOnClickHandler onClickHandler){
         mOnClickHandler = onClickHandler;
@@ -32,7 +31,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
     public interface MoviesAdapterOnClickHandler{
-        public void onMovieClick(Movie movie);
+        void onMovieClick(Movie movie);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Movie movie = mMovies.get(position);
 
         holder.title.setText( movie.getTitle() );
-        holder.vote.setText( Double.toString(movie.getVoteAverage()) );
+        holder.vote.setText( String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
 
         Glide.with(holder.itemView)
                 .load("http://image.tmdb.org/t/p/w185/"+ mMovies.get(position).getPosterPath())
@@ -77,39 +76,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView poster;
-        TextView title;
-        TextView vote;
-        public ViewHolder(final View itemView) {
+        final ImageView poster;
+        final TextView title;
+        final TextView vote;
+        ViewHolder(final View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.item_poster);
             title = itemView.findViewById(R.id.item_movie_title);
             vote = itemView.findViewById(R.id.item_movie_vote);
             itemView.setOnClickListener(this);
 
-//            if ( mCalculatedHeight==0 ){
-//                calculateHeight(poster);
-//            } else {
-//                poster.getLayoutParams().height = mCalculatedHeight;
-//            }
         }
 
-        private void calculateHeight(final ImageView poster){
-            ViewTreeObserver vto = poster.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    poster.getViewTreeObserver().removeOnPreDrawListener(this);
-
-                    int width = poster.getMeasuredWidth();
-
-                    int height = (int) (width * 1.5)+2;
-                    Log.d(LOG_TAG, "width=" + width + " height=" + height);
-                    poster.getLayoutParams().height = height;
-                    mCalculatedHeight = height;
-                    return true;
-                } });
-
-        }
 
 
         @Override

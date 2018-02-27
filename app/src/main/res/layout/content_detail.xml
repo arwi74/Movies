@@ -19,7 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detail_poster"
             app:layout_constraintTop_toTopOf="@+id/detail_poster"
-            tool:text="Big Bang theory sezon 10" />
+            />
 
         <TextView
             android:id="@+id/detail_release_date_label"
@@ -60,10 +60,11 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/detail_poster_description"/>
 
         <TextView
-            android:id="@+id/detail_vote_avarge_label"
+            android:id="@+id/detail_vote_average_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/detail_right_margin"
@@ -71,7 +72,7 @@
             android:layout_marginRight="@dimen/detail_right_margin"
             android:layout_marginStart="@dimen/detail_item_space"
             android:layout_marginTop="@dimen/detail_items_vertical_space"
-            android:text="@string/detail_vote_avarge_label"
+            android:text="@string/detail_vote_average_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detail_poster"
@@ -79,7 +80,7 @@
 
 
         <TextView
-            android:id="@+id/detail_vote_avarge"
+            android:id="@+id/detail_vote_average"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/detail_right_margin"
@@ -90,29 +91,30 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detail_poster"
-            app:layout_constraintTop_toBottomOf="@+id/detail_vote_avarge_label"
+            app:layout_constraintTop_toBottomOf="@+id/detail_vote_average_label"
             tool:text="7.5" />
 
         <TextView
-            android:id="@+id/detail_overwiew"
+            android:id="@+id/detail_overview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/detail_right_margin"
+            android:layout_marginRight="@dimen/detail_right_margin"
             android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginLeft="@dimen/detail_margin_left"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/barrier2"
-            tool:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+            app:layout_constraintTop_toTopOf="@+id/barrier2"/>
 
         <android.support.constraint.Barrier
             android:id="@+id/barrier2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="detail_vote_avarge,detail_poster"
-            tool:layout_editor_absoluteY="465dp" />
+            app:constraint_referenced_ids="detail_vote_average,detail_poster"
+             />
 
 
     </android.support.constraint.ConstraintLayout>

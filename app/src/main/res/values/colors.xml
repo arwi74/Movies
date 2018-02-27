@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#7f0000</color>
     <color name="colorAccent">#00acc1</color>
 
-    <color name="transparentBlack">#77000000</color>
     <color name="colorGradientStart">#66000000</color>
     <color name="colorGradientEnd">#dd000000</color>
     <color name="colorGradientGoldStart">#bbffff5e</color>

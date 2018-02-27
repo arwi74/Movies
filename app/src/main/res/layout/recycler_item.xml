@@ -13,7 +13,7 @@
         tool:layout_height="300dp"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/recycler_item_image_min_height"
-        app:AspectRatio="0.667"
+        app:aspectRatio="0.667"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
       />
@@ -27,7 +27,6 @@
         android:gravity="bottom"
         android:visibility="visible"
         android:padding="@dimen/recycler_item_title_padding"
-        tool:text="Piękny i bestia"
         android:textColor="@android:color/white"
         android:background="@drawable/gradient_background"
         />
@@ -36,7 +35,7 @@
         android:id="@+id/item_movie_vote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:layout_margin="@dimen/recycler_item_vote_margin"
         android:visibility="visible"
         android:textSize="@dimen/item_movie_vote_text_size"

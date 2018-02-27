@@ -3,6 +3,7 @@ package com.example.arek.movies;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,19 +35,16 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private ActivityMainBinding mBinding;
     private RecyclerView mRecycler;
     private MoviesAdapter mAdapter;
-    private List<Movie> mMovies = new ArrayList<>();
 
 
-    public static final int SORT_MODE_POPULAR = 0;
-    public static final int SORT_MODE_TOP_RATED = 1;
-    public int mSortMode = SORT_MODE_POPULAR;
+    private static final int SORT_MODE_POPULAR = 0;
+    private static final int SORT_MODE_TOP_RATED = 1;
+    private int mSortMode = SORT_MODE_POPULAR;
     private int mPage = 1;
-    private boolean mNotifyChanges = false;
+    private boolean mSwapData = false;
     private boolean mLoading = false;
 
     public static final String EXTRA_DETAIL_MOVIE = "detail_movie";
-
-    private final static String THE_MOVIE_DB_API_KEY = BuildConfig.THE_MOVIE_DB_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         loadMovies();
 
 
-        mAdapter = new MoviesAdapter(mMovies, this);
+        mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
 
         mRecycler = mBinding.content.recyclerView;
         mRecycler.setHasFixedSize(true);
@@ -70,10 +68,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         mRecycler.setLayoutManager(new GridLayoutManager(this,2));
 
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -97,15 +91,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     }
 
-    public void showProgressBar(){
+    private void showProgressBar(){
         mBinding.content.progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void hideProgressBar(){
+    private void hideProgressBar(){
         mBinding.content.progressBar.setVisibility(View.GONE);
     }
 
-    public void showTitle(){
+    private void showTitle(){
         if ( mSortMode == SORT_MODE_POPULAR){
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_popular));
         }else{
@@ -117,18 +111,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
 
 
-    public void loadMovies(){
+    private void loadMovies(){
         mPage=1;
         showProgressBar();
         loadMoviesPage(mSortMode,mPage);
-        mNotifyChanges = true;
+        mSwapData = true;
     }
 
-    public void loadMoreMovies(){
+    private void loadMoreMovies(){
         showProgressBar();
         mPage++;
         loadMoviesPage(mSortMode,mPage);
-        mNotifyChanges = false;
+        mSwapData = false;
     }
 
 
@@ -137,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         MovieDbApi movieDbApi = ApiClient.getInstance(this);
         Call<MovieDbResult> call;
         String language = Locale.getDefault().getLanguage();
-        Log.d(LOG_TAG,language);
         if ( displayMode == SORT_MODE_POPULAR){
-            call = movieDbApi.getMoviesPopular(THE_MOVIE_DB_API_KEY, page, language);
+            call = movieDbApi.getMoviesPopular(BuildConfig.THE_MOVIE_DB_API_KEY, page, language);
         }else{
-            call = movieDbApi.getMoviesTopRated(THE_MOVIE_DB_API_KEY, page, language);
+            call = movieDbApi.getMoviesTopRated(BuildConfig.THE_MOVIE_DB_API_KEY, page, language);
         }
         call.enqueue(mCallback);
     }
@@ -190,10 +183,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         startActivity(intent);
     }
 
-    public void showMovies(List<Movie> movies){
+    private void showMovies(List<Movie> movies){
         mLoading=false;
         hideProgressBar();
-        if ( mNotifyChanges ) {
+        if (mSwapData) {
             mAdapter.swap(movies);
             mRecycler.scrollToPosition(1);
         }else{
@@ -202,28 +195,31 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
 
-    Callback<MovieDbResult> mCallback = new Callback<MovieDbResult>() {
+    private final Callback<MovieDbResult> mCallback = new Callback<MovieDbResult>() {
         @Override
-        public void onResponse(Call<MovieDbResult> call, Response<MovieDbResult> response) {
+        public void onResponse(@NonNull Call<MovieDbResult> call,@NonNull Response<MovieDbResult> response) {
             Log.d("**",response.toString());
             if (response.isSuccessful()){
                 MovieDbResult result = response.body();
-                List<Movie> movies = result.getMovies();
-                        //mAdapter.notifyDataSetChanged();
-                showMovies(movies);
+
+                if ( result!=null && result.getMovies()!= null ) {
+                    List<Movie> movies = result.getMovies();
+                    showMovies(movies);
+                }
+
             } else{
                 showLoadErrorMessage();
             }
         }
 
         @Override
-        public void onFailure(Call<MovieDbResult> call, Throwable t) {
+        public void onFailure(@NonNull Call<MovieDbResult>  call,@NonNull Throwable t) {
             showLoadErrorMessage();
             t.printStackTrace();
         }
     };
 
-    public void showLoadErrorMessage() {
+    private void showLoadErrorMessage() {
         Log.d(LOG_TAG,"error message");
         Toast.makeText(this,getString(R.string.load_error_message),Toast.LENGTH_LONG).show();
         hideProgressBar();
@@ -231,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     @Override
     public void onMovieClick(Movie movie) {
-        Toast.makeText(this,movie.getTitle(),Toast.LENGTH_LONG).show();
         openDetailActivity(movie);
     }
 

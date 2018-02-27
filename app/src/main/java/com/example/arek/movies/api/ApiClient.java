@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Arkadiusz Wilczek on 20.02.18.
+ * Api client
  */
 
 public class ApiClient {
