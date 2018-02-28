@@ -35,7 +35,6 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra(MainActivity.EXTRA_DETAIL_MOVIE);
 
-
         showDetail(movie);
         Log.d("DetailActivity",movie.getGenreIds().toString());
     }
@@ -56,7 +55,6 @@ public class DetailActivity extends AppCompatActivity {
         Uri posterUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W185, movie.getPosterPath());
         Uri backdropUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W500, movie.getBackdropPath());
 
-
         GlideApp.with(this)
                 .load(posterUri)
                 .error(R.drawable.ic_broken_image_grey_24dp)
@@ -66,8 +64,6 @@ public class DetailActivity extends AppCompatActivity {
                 .load(backdropUri)
                 .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(mBinding.toolbarImage);
-
-
     }
 
 
