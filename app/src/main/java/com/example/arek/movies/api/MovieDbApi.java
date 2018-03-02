@@ -2,7 +2,8 @@ package com.example.arek.movies.api;
 
 import com.example.arek.movies.model.MovieDbResult;
 
-import retrofit2.Call;
+
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -15,12 +16,12 @@ public interface MovieDbApi {
     String BASE_URL = "https://api.themoviedb.org/";
 
     @GET("/3/movie/popular")
-    Call<MovieDbResult> getMoviesPopular(
+    Observable<MovieDbResult> getMoviesPopular(
             @Query("page")int page,
             @Query("language")String language);
 
     @GET("/3/movie/top_rated")
-    Call<MovieDbResult> getMoviesTopRated(
+    Observable<MovieDbResult> getMoviesTopRated(
             @Query("page")int page,
             @Query("language")String language);
 

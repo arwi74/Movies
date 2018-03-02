@@ -3,7 +3,6 @@ package com.example.arek.movies;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +25,10 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler {
 
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private boolean mLoading = false;
 
     public static final String EXTRA_DETAIL_MOVIE = "detail_movie";
+
+    private DisposableObserver<MovieDbResult> disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,14 +120,50 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     private void loadMoviesPage(int displayMode, int page) {
         showProgressBar();
-        Call<MovieDbResult> call;
         String language = Locale.getDefault().getLanguage();
+        disposable = getDisposableObserver();
         if (displayMode == SORT_MODE_POPULAR) {
-            call = movieDbApi.getMoviesPopular(page, language);
+            movieDbApi.getMoviesPopular(page, language)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(disposable);
         } else {
-            call = movieDbApi.getMoviesTopRated(page, language);
+            movieDbApi.getMoviesTopRated(page, language)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(disposable);
         }
-        call.enqueue(mCallback);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (disposable!=null && !disposable.isDisposed()){
+            disposable.dispose();
+        }
+    }
+
+    private DisposableObserver<MovieDbResult> getDisposableObserver(){
+        return new DisposableObserver<MovieDbResult>() {
+            @Override
+            public void onNext(MovieDbResult movieDbResult) {
+                hideProgressBar();
+                mLoading = false;
+                showMovies(movieDbResult.getMovies());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                hideProgressBar();
+                mLoading = false;
+                showLoadErrorMessage();
+            }
+
+            @Override
+            public void onComplete() {
+                hideProgressBar();
+            }
+        };
     }
 
     @Override
@@ -171,8 +209,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     private void showMovies(List<Movie> movies) {
-        mLoading = false;
-        hideProgressBar();
         if (mSwapData) {
             mAdapter.swap(movies);
             mRecycler.scrollToPosition(1);
@@ -180,30 +216,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             mAdapter.addMovies(movies);
         }
     }
-
-    private final Callback<MovieDbResult> mCallback = new Callback<MovieDbResult>() {
-        @Override
-        public void onResponse(@NonNull Call<MovieDbResult> call, @NonNull Response<MovieDbResult> response) {
-            Log.d(LOG_TAG, response.toString());
-            if (response.isSuccessful()) {
-                MovieDbResult result = response.body();
-
-                if (result != null && result.getMovies() != null) {
-                    List<Movie> movies = result.getMovies();
-                    showMovies(movies);
-                }
-
-            } else {
-                showLoadErrorMessage();
-            }
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<MovieDbResult> call, @NonNull Throwable t) {
-            showLoadErrorMessage();
-            t.printStackTrace();
-        }
-    };
 
     private void showLoadErrorMessage() {
         Log.d(LOG_TAG, "error message");
