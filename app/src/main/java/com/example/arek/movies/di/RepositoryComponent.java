@@ -1,4 +1,4 @@
-package com.example.arek.movies.api;
+package com.example.arek.movies.di;
 
 import com.example.arek.movies.MainActivity;
 
@@ -8,10 +8,11 @@ import dagger.Component;
 
 /**
  * Created by Arkadiusz Wilczek on 27.02.18.
- * NetComponent for dagger
+ * RepositoryComponent for dagger
  */
 @Singleton
-@Component(modules={NetModule.class})
-public interface NetComponent {
+@Component(modules={RepositoryModule.class,NetModule.class,AppModule.class })
+public interface RepositoryComponent {
     void inject(MainActivity activity);
+
 }

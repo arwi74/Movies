@@ -11,6 +11,10 @@ import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
 public class Movie implements Parcelable{
+    public static final int SORT_MODE_POPULAR = 0;
+    public static final int SORT_MODE_TOP_RATED = 1;
+    public static final int SORT_MODE_FAVORITES = 2;
+
 
     @SerializedName("adult")
     private Boolean adult;

@@ -1,9 +1,10 @@
-package com.example.arek.movies.api;
+package com.example.arek.movies.di;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.example.arek.movies.BuildConfig;
+import com.example.arek.movies.api.MovieDbApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -30,19 +31,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class NetModule {
-    private final Application mApp;
 
-    public NetModule(Application app){
-        mApp = app;
-    }
 
     @Provides
     @Singleton
-    Cache ProvideOkHttpCache(){
+    Cache ProvideOkHttpCache(Application app){
         int cacheSize = 10 * 1024 * 1024; //10MB
-        return new Cache(mApp.getCacheDir(), cacheSize);
+        return new Cache(app.getCacheDir(), cacheSize);
     }
-
 
     @Provides
     @Singleton

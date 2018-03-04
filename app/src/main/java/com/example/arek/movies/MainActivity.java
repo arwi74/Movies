@@ -18,6 +18,7 @@ import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityMainBinding;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.model.MovieDbResult;
+import com.example.arek.movies.repository.MoviesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @SuppressWarnings("WeakerAccess")
     @Inject
     public MovieDbApi movieDbApi;
+    @Inject
+    public MoviesRepository mMoviesRepository;
 
-    private static final int SORT_MODE_POPULAR = 0;
-    private static final int SORT_MODE_TOP_RATED = 1;
-    private int mSortMode = SORT_MODE_POPULAR;
+    private int mSortMode = Movie.SORT_MODE_POPULAR;
 
     private int mPage = 1;
     private boolean mSwapData = false;
@@ -60,11 +61,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         setSupportActionBar(toolbar);
         showTitle();
 
-        ((MoviesApp) getApplication()).getNetComponent().inject(this);
+        ((MoviesApp) getApplication()).getRepositoryComponent().inject(this);
 
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
         setRecyclerView();
         loadMovies();
+        mMoviesRepository.test();
     }
 
     private void setRecyclerView(){
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     private void showTitle() {
-        if (mSortMode == SORT_MODE_POPULAR) {
+        if (mSortMode == Movie.SORT_MODE_POPULAR) {
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_popular));
         } else {
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_top_rated));
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         showProgressBar();
         String language = Locale.getDefault().getLanguage();
         disposable = getDisposableObserver();
-        if (displayMode == SORT_MODE_POPULAR) {
+        if (displayMode == Movie.SORT_MODE_POPULAR) {
             movieDbApi.getMoviesPopular(page, language)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -188,14 +190,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     }
 
     private void switchSortMode() {
-        if (mSortMode == SORT_MODE_POPULAR)
-            mSortMode = SORT_MODE_TOP_RATED;
+        if (mSortMode == Movie.SORT_MODE_POPULAR)
+            mSortMode = Movie.SORT_MODE_TOP_RATED;
         else
-            mSortMode = SORT_MODE_POPULAR;
+            mSortMode = Movie.SORT_MODE_POPULAR;
     }
 
     private void setOptionSortIcon(MenuItem item) {
-        if (mSortMode == SORT_MODE_POPULAR) {
+        if (mSortMode == Movie.SORT_MODE_POPULAR) {
             item.setIcon(R.drawable.ic_star_half_white_24dp);
         } else {
             item.setIcon(R.drawable.ic_star_white_24dp);

@@ -2,9 +2,11 @@ package com.example.arek.movies;
 
 import android.app.Application;
 
-import com.example.arek.movies.api.DaggerNetComponent;
-import com.example.arek.movies.api.NetComponent;
-import com.example.arek.movies.api.NetModule;
+import com.example.arek.movies.di.AppModule;
+import com.example.arek.movies.di.DaggerRepositoryComponent;
+import com.example.arek.movies.di.RepositoryComponent;
+import com.example.arek.movies.di.NetModule;
+import com.example.arek.movies.di.RepositoryModule;
 
 /**
  * Created by Arkadiusz Wilczek on 27.02.18.
@@ -13,18 +15,20 @@ import com.example.arek.movies.api.NetModule;
 
 @SuppressWarnings("WeakerAccess")
 public class MoviesApp extends Application {
-    private NetComponent mNetComponent;
+    private RepositoryComponent mRepositoryComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mNetComponent = DaggerNetComponent.builder()
-                .netModule(new NetModule(this))
+        mRepositoryComponent = DaggerRepositoryComponent.builder()
+                .appModule(new AppModule(this))
+                .netModule(new NetModule())
+                .repositoryModule(new RepositoryModule())
                 .build();
+
     }
 
-    public NetComponent getNetComponent(){
-        return mNetComponent;
-    }
+    public RepositoryComponent getRepositoryComponent(){ return mRepositoryComponent; }
+
 }
