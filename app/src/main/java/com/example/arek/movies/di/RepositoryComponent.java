@@ -1,6 +1,6 @@
 package com.example.arek.movies.di;
 
-import com.example.arek.movies.MainActivity;
+import com.example.arek.movies.moviesList.MainActivity;
 
 import javax.inject.Singleton;
 

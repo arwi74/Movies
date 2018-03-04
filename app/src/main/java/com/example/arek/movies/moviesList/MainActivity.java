@@ -1,4 +1,4 @@
-package com.example.arek.movies;
+package com.example.arek.movies.moviesList;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.arek.movies.movieDetail.DetailActivity;
+import com.example.arek.movies.MoviesApp;
+import com.example.arek.movies.R;
 import com.example.arek.movies.adapter.MoviesAdapter;
 import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityMainBinding;
@@ -31,7 +34,9 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.MoviesAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements
+        MoviesAdapter.MoviesAdapterOnClickHandler,
+        MoviesListContract.View {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding mBinding;
@@ -42,10 +47,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     public MovieDbApi movieDbApi;
     @Inject
     public MoviesRepository mMoviesRepository;
+    public MoviesListContract.Presenter mPresenter;
 
     private int mSortMode = Movie.SORT_MODE_POPULAR;
 
-    private int mPage = 1;
     private boolean mSwapData = false;
     private boolean mLoading = false;
 
@@ -65,8 +70,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
         setRecyclerView();
-        loadMovies();
-        mMoviesRepository.test();
+        mPresenter = new MoviesListPresenter(mMoviesRepository);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.takeView(this);
+        mPresenter.loadMovies(mSortMode);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.dropView();
     }
 
     private void setRecyclerView(){
@@ -85,18 +103,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
                 int itemCount = layoutManager.getItemCount();
                 if (itemCount > 0 && (lastVisibleItem > itemCount - 4) && !mLoading) {
                     Log.d(LOG_TAG, "loading more request");
-                    loadMoreMovies();
+                    mPresenter.loadMoreMovies(mSortMode);
                     mLoading = true;
                 }
             }
         });
     }
 
-    private void showProgressBar() {
+    public void showProgressBar() {
         mBinding.content.progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressBar() {
+    public void hideProgressBar() {
         mBinding.content.progressBar.setVisibility(View.GONE);
     }
 
@@ -106,66 +124,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         } else {
             mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_top_rated));
         }
-    }
-
-    private void loadMovies() {
-        mPage = 1;
-        loadMoviesPage(mSortMode, mPage);
-        mSwapData = true;
-    }
-
-    private void loadMoreMovies() {
-        mPage++;
-        loadMoviesPage(mSortMode, mPage);
-        mSwapData = false;
-    }
-
-    private void loadMoviesPage(int displayMode, int page) {
-        showProgressBar();
-        String language = Locale.getDefault().getLanguage();
-        disposable = getDisposableObserver();
-        if (displayMode == Movie.SORT_MODE_POPULAR) {
-            movieDbApi.getMoviesPopular(page, language)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(disposable);
-        } else {
-            movieDbApi.getMoviesTopRated(page, language)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(disposable);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (disposable!=null && !disposable.isDisposed()){
-            disposable.dispose();
-        }
-    }
-
-    private DisposableObserver<MovieDbResult> getDisposableObserver(){
-        return new DisposableObserver<MovieDbResult>() {
-            @Override
-            public void onNext(MovieDbResult movieDbResult) {
-                hideProgressBar();
-                mLoading = false;
-                showMovies(movieDbResult.getMovies());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                hideProgressBar();
-                mLoading = false;
-                showLoadErrorMessage();
-            }
-
-            @Override
-            public void onComplete() {
-                hideProgressBar();
-            }
-        };
     }
 
     @Override
@@ -183,7 +141,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         if (menuItem == R.id.action_menu_popular_top_rated) {
             switchSortMode();
             setOptionSortIcon(item);
-            loadMovies();
+            mSwapData = true;
+            mPresenter.loadMovies(mSortMode);
             showTitle();
         }
         return super.onOptionsItemSelected(item);
@@ -210,19 +169,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         startActivity(intent);
     }
 
-    private void showMovies(List<Movie> movies) {
+    public void showMovies(List<Movie> movies) {
         if (mSwapData) {
             mAdapter.swap(movies);
             mRecycler.scrollToPosition(1);
         } else {
             mAdapter.addMovies(movies);
         }
+        mSwapData = false;
+        mLoading = false;
     }
 
-    private void showLoadErrorMessage() {
+    public void showLoadErrorMessage() {
         Log.d(LOG_TAG, "error message");
         Toast.makeText(this, getString(R.string.load_error_message), Toast.LENGTH_LONG).show();
-        hideProgressBar();
+        mLoading = false;
     }
 
     @Override

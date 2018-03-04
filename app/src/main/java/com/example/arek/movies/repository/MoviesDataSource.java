@@ -18,4 +18,6 @@ public interface MoviesDataSource{
 
     void deleteFavoriteMovie(Movie movie);
 
+    boolean isMoreMovies();
+
 }

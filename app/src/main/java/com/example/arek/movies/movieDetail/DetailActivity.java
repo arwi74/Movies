@@ -1,4 +1,4 @@
-package com.example.arek.movies;
+package com.example.arek.movies.movieDetail;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,7 +8,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
+import com.example.arek.movies.R;
 import com.example.arek.movies.databinding.ActivityDetailBinding;
+import com.example.arek.movies.moviesList.MainActivity;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
@@ -21,7 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         Toolbar toolbar = mBinding.toolbar;
 
