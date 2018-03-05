@@ -206,7 +206,7 @@ public class Movie implements Parcelable{
         dest.writeList(genreIds);
     }
 
-    public static final Parcelable.Creator CREATOR =new  Parcelable.Creator(){
+    public static final Creator CREATOR =new  Creator(){
         @Override
         public Movie createFromParcel(Parcel source) {
             return new Movie(source);
