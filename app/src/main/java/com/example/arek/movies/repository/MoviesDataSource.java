@@ -12,7 +12,7 @@ import io.reactivex.Observable;
 
 public interface MoviesDataSource{
 
-    Observable<List<Movie>> getMovies(int sortType);
+    Observable<List<Movie>> getMovies(int sortType, boolean cached);
 
     void saveFavoriteMovie(Movie movie);
 

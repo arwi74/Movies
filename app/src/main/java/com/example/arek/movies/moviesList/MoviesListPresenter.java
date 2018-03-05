@@ -37,17 +37,19 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
     @Override
     public void loadMovies(int sortType) {
         mView.showProgressBar();
-        mRepository.getMovies(sortType)
+        mRepository.getMovies(sortType, true)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getDisposableObserver());
     }
 
     @Override
     public void loadMoreMovies(int sortType) {
-        mView.showProgressBar();
-        mRepository.getMovies(sortType)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableObserver());
+        if ( mRepository.isMoreMovies() ) {
+            mView.showProgressBar();
+            mRepository.getMovies(sortType, false)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getDisposableObserver());
+        }
     }
 
     @Override

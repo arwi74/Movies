@@ -20,18 +20,12 @@ import com.example.arek.movies.adapter.MoviesAdapter;
 import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityMainBinding;
 import com.example.arek.movies.model.Movie;
-import com.example.arek.movies.model.MovieDbResult;
 import com.example.arek.movies.repository.MoviesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -56,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final String EXTRA_DETAIL_MOVIE = "detail_movie";
 
-    private DisposableObserver<MovieDbResult> disposable;
+    private static final String STATE_SCROLL_POSITION = "state_recycler_position";
+    private static final String STATE_SORT_MODE = "state_sort_mode";
+    private int mScrollPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +60,15 @@ public class MainActivity extends AppCompatActivity implements
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         Toolbar toolbar = mBinding.toolbar;
         setSupportActionBar(toolbar);
+
+        if ( savedInstanceState!=null
+                && savedInstanceState.containsKey(STATE_SCROLL_POSITION)
+                && savedInstanceState.containsKey(STATE_SORT_MODE)) {
+            mScrollPosition = savedInstanceState.getInt(STATE_SCROLL_POSITION);
+            mSortMode = savedInstanceState.getInt(STATE_SORT_MODE);
+            Log.d(LOG_TAG,"restore position: " + mScrollPosition);
+        }
+
         showTitle();
 
         ((MoviesApp) getApplication()).getRepositoryComponent().inject(this);
@@ -71,20 +76,29 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
         setRecyclerView();
         mPresenter = new MoviesListPresenter(mMoviesRepository);
+        mPresenter.takeView(this);
+        mPresenter.loadMovies(mSortMode);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.takeView(this);
-        mPresenter.loadMovies(mSortMode);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.dropView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        int position = ((GridLayoutManager)mRecycler.getLayoutManager()).findFirstVisibleItemPosition();
+        Log.d(LOG_TAG,"save position: "+position);
+        outState.putInt(STATE_SCROLL_POSITION, position);
+        outState.putInt(STATE_SORT_MODE, mSortMode);
+        super.onSaveInstanceState(outState);
     }
 
     private void setRecyclerView(){
@@ -178,6 +192,10 @@ public class MainActivity extends AppCompatActivity implements
         }
         mSwapData = false;
         mLoading = false;
+        if ( mScrollPosition !=0 ){
+            mRecycler.scrollToPosition(mScrollPosition);
+            mScrollPosition = 0;
+        }
     }
 
     public void showLoadErrorMessage() {

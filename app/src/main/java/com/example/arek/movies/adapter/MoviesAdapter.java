@@ -51,9 +51,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
         holder.title.setText( movie.getTitle() );
         holder.vote.setText( String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
-        Log.d(LOG_TAG, UtilsImage.buildImagePath(
-                UtilsImage.SIZE_W185,
-                mMovies.get(position).getPosterPath()).toString());
+//        Log.d(LOG_TAG, UtilsImage.buildImagePath(
+//                UtilsImage.SIZE_W185,
+//                mMovies.get(position).getPosterPath()).toString());
 
         Uri posterUri = UtilsImage.buildImagePath(UtilsImage.SIZE_W185, mMovies.get(position).getPosterPath());
 
