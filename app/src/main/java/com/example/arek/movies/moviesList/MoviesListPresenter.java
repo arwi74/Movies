@@ -63,7 +63,6 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
     }
 
 
-
     private DisposableObserver<List<Movie>> getDisposableObserver(){
         return new DisposableObserver<List<Movie>>() {
             @Override

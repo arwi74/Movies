@@ -19,7 +19,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    MoviesRepository provideMoviesRepository(MovieDbApi movieDbApi){
-        return new MoviesRepository(movieDbApi);
+    MoviesRepository provideMoviesRepository(MovieDbApi movieDbApi,Application app){
+        return new MoviesRepository(movieDbApi, app);
     }
 }

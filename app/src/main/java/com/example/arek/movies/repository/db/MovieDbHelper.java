@@ -31,7 +31,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                         MovieDbContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT, " +
                         MovieDbContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT, " +
                         MovieDbContract.MovieEntry.COLUMN_TITLE + " TEXT, " +
-                        MovieDbContract.MovieEntry.COLUMN_VIDEO + " TEXT, " +
+                        MovieDbContract.MovieEntry.COLUMN_VIDEO + " INTEGER, " +
                         MovieDbContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL, " +
                         MovieDbContract.MovieEntry.COLUMN_VOTE_COUNT + " INTEGER );";
 

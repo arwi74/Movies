@@ -15,13 +15,14 @@ public class Movie implements Parcelable{
     public static final int SORT_MODE_TOP_RATED = 1;
     public static final int SORT_MODE_FAVORITES = 2;
 
+    public Movie(){};
 
     @SerializedName("adult")
     private Boolean adult;
     @SerializedName("backdrop_path")
     private String backdropPath;
     @SerializedName("genre_ids")
-    private List<Long> genreIds;
+    private List<Integer> genreIds;
     @SerializedName("id")
     private Long Id;
     @SerializedName("original_language")
@@ -61,11 +62,11 @@ public class Movie implements Parcelable{
         this.backdropPath = backdropPath;
     }
 
-    public List<Long> getGenreIds() {
+    public List<Integer> getGenreIds() {
         return genreIds;
     }
 
-    public void setGenreIds(List<Long> genreIds) {
+    public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
     }
 
@@ -180,7 +181,7 @@ public class Movie implements Parcelable{
 
         popularity = in.readDouble();
         voteAverage = in.readDouble();
-        List<Long> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         in.readList(list,Long.class.getClassLoader());
         genreIds = list;
     }

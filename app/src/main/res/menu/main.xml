@@ -3,8 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="@string/main_menu_popular"
-        android:id="@+id/action_menu_popular_top_rated"
+        android:id="@+id/action_menu_popular"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_whatshot_white_24dp"
+        />
+    <item android:title="@string/main_menu_top_rated"
+        android:id="@+id/action_menu_top_rated"
         app:showAsAction="always"
         android:icon="@drawable/ic_star_white_24dp"
         />
+    <item android:title="@string/main_menu_favorite"
+        android:id="@+id/action_menu_favorite"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        />
+
 </menu>

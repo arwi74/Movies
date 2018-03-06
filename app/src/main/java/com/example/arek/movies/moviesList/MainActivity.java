@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem itemSort = menu.findItem(R.id.action_menu_popular_top_rated);
-        setOptionSortIcon(itemSort);
+     //   MenuItem itemSort = menu.findItem(R.id.action_menu_popular_top_rated);
+       // setOptionSortIcon(itemSort);
         return true;
     }
 
@@ -152,21 +152,37 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItem = item.getItemId();
 
-        if (menuItem == R.id.action_menu_popular_top_rated) {
-            switchSortMode();
-            setOptionSortIcon(item);
-            mSwapData = true;
-            mPresenter.loadMovies(mSortMode);
-            showTitle();
+//        if (menuItem == R.id.action_menu_popular_top_rated) {
+//            switchSortMode();
+//            setOptionSortIcon(item);
+//            mSwapData = true;
+//            mPresenter.loadMovies(mSortMode);
+//
+//        }
+        if (menuItem == R.id.action_menu_popular){
+            if ( switchSortMode(Movie.SORT_MODE_POPULAR) ){
+                mPresenter.loadMovies(mSortMode);
+            }
+        }else if (menuItem == R.id.action_menu_top_rated){
+            if ( switchSortMode(Movie.SORT_MODE_TOP_RATED) ){
+                mPresenter.loadMovies(mSortMode);
+            }
+        }else if (menuItem == R.id.action_menu_favorite){
+            if ( switchSortMode(Movie.SORT_MODE_FAVORITES) ){
+                mPresenter.loadMovies(mSortMode);
+            }
         }
+
+        showTitle();
         return super.onOptionsItemSelected(item);
     }
 
-    private void switchSortMode() {
-        if (mSortMode == Movie.SORT_MODE_POPULAR)
-            mSortMode = Movie.SORT_MODE_TOP_RATED;
-        else
-            mSortMode = Movie.SORT_MODE_POPULAR;
+    private boolean switchSortMode(int sortMode) {
+        if ( mSortMode == sortMode ) return false;
+
+        mSortMode = sortMode;
+        mSwapData = true;
+        return true;
     }
 
     private void setOptionSortIcon(MenuItem item) {
