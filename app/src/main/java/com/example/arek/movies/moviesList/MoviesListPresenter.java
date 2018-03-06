@@ -54,6 +54,11 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
 
     @Override
     public void setFavorite(Movie movie) {
+        movie.setFavorite(!movie.isFavorite());
+        if ( movie.isFavorite() )
+            mRepository.saveFavoriteMovie(movie);
+        else
+            mRepository.deleteFavoriteMovie(movie);
 
     }
 

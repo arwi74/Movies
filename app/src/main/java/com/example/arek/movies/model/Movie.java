@@ -46,6 +46,16 @@ public class Movie implements Parcelable{
     @SerializedName("vote_count")
     private Long voteCount;
 
+    private boolean favorite = false;
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public Boolean getAdult() {
         return adult;
     }

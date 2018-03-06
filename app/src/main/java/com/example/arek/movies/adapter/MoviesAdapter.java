@@ -35,6 +35,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     public interface MoviesAdapterOnClickHandler{
         void onMovieClick(Movie movie);
+        void onFavoriteClick(Movie movie);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
         holder.title.setText( movie.getTitle() );
         holder.vote.setText( String.format(Locale.getDefault(),"%.1f",movie.getVoteAverage()) );
+        holder.setFavoriteIcon(movie);
 //        Log.d(LOG_TAG, UtilsImage.buildImagePath(
 //                UtilsImage.SIZE_W185,
 //                mMovies.get(position).getPosterPath()).toString());
@@ -88,22 +90,40 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         final ImageView poster;
         final TextView title;
         final TextView vote;
+        final ImageView favorite;
         ViewHolder(final View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.item_poster);
             title = itemView.findViewById(R.id.item_movie_title);
             vote = itemView.findViewById(R.id.item_movie_vote);
+            favorite = itemView.findViewById(R.id.item_favorite_icon);
             itemView.setOnClickListener(this);
+            favorite.setOnClickListener(this);
 
         }
-
-
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             Movie movie = mMovies.get(position);
-            mOnClickHandler.onMovieClick(movie);
+
+            if ( v.getId() == R.id.item_favorite_icon){
+                    favoriteClick(movie);
+            } else {
+                mOnClickHandler.onMovieClick(movie);
+            }
+        }
+
+        void favoriteClick(Movie movie){
+            mOnClickHandler.onFavoriteClick(movie);
+            setFavoriteIcon(movie);
+        }
+
+        void setFavoriteIcon(Movie movie){
+            if ( movie.isFavorite() )
+                favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+            else
+                favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
     }
 

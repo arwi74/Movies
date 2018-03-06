@@ -225,4 +225,10 @@ public class MainActivity extends AppCompatActivity implements
         openDetailActivity(movie);
     }
 
+    @Override
+    public void onFavoriteClick(Movie movie) {
+        mPresenter.setFavorite(movie);
+        Toast.makeText(this, "save favorite", Toast.LENGTH_LONG).show();
+    }
+
 }

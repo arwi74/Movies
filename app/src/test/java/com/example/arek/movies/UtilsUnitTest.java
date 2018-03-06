@@ -37,4 +37,22 @@ public class UtilsUnitTest {
 //        System.out.println(s.toString());
 //        System.out.println(l1.toString());
     }
+
+    @Test
+    public void listRemove(){
+        List<Long> list = new ArrayList<>();
+        list.add(3l);
+        list.add(1l);
+        list.add(1l);
+        list.add(3l);
+        list.add(4l);
+
+        long l = 1l;
+
+        while (list.contains(l))
+        list.remove(l);
+
+        System.out.print(list.toString());
+
+    }
 }
