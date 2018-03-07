@@ -1,5 +1,6 @@
 package com.example.arek.movies.movieDetail;
 
+import android.app.Application;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -9,22 +10,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.example.arek.movies.MoviesApp;
 import com.example.arek.movies.R;
+import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityDetailBinding;
+import com.example.arek.movies.model.Review;
+import com.example.arek.movies.model.Video;
 import com.example.arek.movies.moviesList.MainActivity;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.repository.ReviewsRepository;
+import com.example.arek.movies.repository.VideosRepository;
 import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
 
+import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding mBinding;
+    @Inject
+    public VideosRepository mVideosRepository;
+    @Inject
+    public ReviewsRepository mReviewsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        ((MoviesApp) getApplication()).getRepositoryComponent().inject(this);
 
         Toolbar toolbar = mBinding.toolbar;
 
@@ -40,6 +58,15 @@ public class DetailActivity extends AppCompatActivity {
 
         showDetail(movie);
         Log.d("DetailActivity",movie.getGenreIds().toString());
+
+        mVideosRepository.getVideos(movie.getId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getDisposableVideoObserver());
+
+        mReviewsRepository.getReviews(movie.getId(),true)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getDisposableReviewObserver());
+
     }
 
     @Override
@@ -67,6 +94,59 @@ public class DetailActivity extends AppCompatActivity {
                 .load(backdropUri)
                 .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(mBinding.toolbarImage);
+    }
+
+    private DisposableObserver<List<Review>> getDisposableReviewObserver(){
+        return new DisposableObserver<List<Review>>() {
+            @Override
+            public void onNext(List<Review> reviews) {
+                for (Review review: reviews){
+                    mBinding.content.reviews.append("\n");
+                    mBinding.content.reviews.append( review.getAuthor() );
+                    mBinding.content.reviews.append("\n");
+                    mBinding.content.reviews.append( review.getContent() );
+                    mBinding.content.reviews.append("\n");
+                    mBinding.content.reviews.append( "   " );
+                    mBinding.content.reviews.append("\n");
+                    mBinding.content.reviews.append( "***" );
+                    mBinding.content.reviews.append("\n");
+                    mBinding.content.reviews.append( "   " );
+                    mBinding.content.reviews.append("\n");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+    }
+
+    private DisposableObserver<List<Video>> getDisposableVideoObserver(){
+        return new DisposableObserver<List<Video>>() {
+            @Override
+            public void onNext(List<Video> videos) {
+                for (Video video: videos){
+                    mBinding.content.videos.append( video.getName() );mBinding.content.reviews.append("\n");
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
     }
 
 

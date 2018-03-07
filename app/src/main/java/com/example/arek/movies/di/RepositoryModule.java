@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.repository.MoviesRepository;
+import com.example.arek.movies.repository.ReviewsRepository;
+import com.example.arek.movies.repository.VideosRepository;
 
 import javax.inject.Singleton;
 
@@ -22,4 +24,17 @@ public class RepositoryModule {
     MoviesRepository provideMoviesRepository(MovieDbApi movieDbApi,Application app){
         return new MoviesRepository(movieDbApi, app);
     }
+
+    @Provides
+    @Singleton
+    VideosRepository provideVideosRepository(MovieDbApi movieDbApi){
+        return new VideosRepository(movieDbApi);
+    }
+
+    @Provides
+    @Singleton
+    ReviewsRepository provideReviewsRepository(MovieDbApi movieDbApi){
+        return new ReviewsRepository(movieDbApi);
+    }
+
 }

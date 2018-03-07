@@ -22,11 +22,11 @@ public class VideoResult {
         mId = id;
     }
 
-    public List<Video> getResults() {
+    public List<Video> getVideos() {
         return mVideos;
     }
 
-    public void setResults(List<Video> videos) {
+    public void setVideos(List<Video> videos) {
         mVideos = videos;
     }
 

@@ -12,11 +12,11 @@ public class ReviewsResult {
     @SerializedName("id")
     private Long mId;
     @SerializedName("page")
-    private Long mPage;
+    private int mPage;
     @SerializedName("results")
     private List<Review> mReviews;
     @SerializedName("total_pages")
-    private Long mTotalPages;
+    private int mTotalPages;
     @SerializedName("total_results")
     private Long mTotalResults;
 
@@ -28,11 +28,11 @@ public class ReviewsResult {
         mId = id;
     }
 
-    public Long getPage() {
+    public int getPage() {
         return mPage;
     }
 
-    public void setPage(Long page) {
+    public void setPage(int page) {
         mPage = page;
     }
 
@@ -44,11 +44,11 @@ public class ReviewsResult {
         mReviews = reviews;
     }
 
-    public Long getTotalPages() {
+    public int getTotalPages() {
         return mTotalPages;
     }
 
-    public void setTotalPages(Long totalPages) {
+    public void setTotalPages(int totalPages) {
         mTotalPages = totalPages;
     }
 

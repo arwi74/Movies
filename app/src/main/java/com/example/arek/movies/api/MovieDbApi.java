@@ -1,6 +1,8 @@
 package com.example.arek.movies.api;
 
 import com.example.arek.movies.model.MovieDbResult;
+import com.example.arek.movies.model.ReviewsResult;
+import com.example.arek.movies.model.VideoResult;
 
 
 import io.reactivex.Observable;
@@ -27,13 +29,13 @@ public interface MovieDbApi {
             @Query("language")String language);
 
     @GET("/3/movie/{id}/reviews")
-    Observable<MovieDbResult> getReviews(
+    Observable<ReviewsResult> getReviews(
             @Path("id")long id,
             @Query("page")int page,
             @Query("language")String language);
 
     @GET("/3/movie/{id}/videos")
-    Observable<MovieDbResult> getVideos(
+    Observable<VideoResult> getVideos(
             @Path("id")long id,
             @Query("language")String language);
 
