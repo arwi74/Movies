@@ -1,6 +1,7 @@
 package com.example.arek.movies.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.bumptech.glide.request.transition.NoTransition;
+import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.request.transition.TransitionFactory;
 import com.example.arek.movies.R;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.utils.GlideApp;
@@ -17,6 +23,7 @@ import com.example.arek.movies.utils.UtilsImage;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
 
 /**
  * Created by Arkadiusz Wilczek on 19.02.18.
@@ -126,6 +133,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
                 favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
         }
     }
+
 
 
 }

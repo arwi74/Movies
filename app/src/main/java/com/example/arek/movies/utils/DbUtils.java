@@ -54,6 +54,7 @@ public class DbUtils {
         movie.setVideo(getBoolean(cursor, MovieEntry.COLUMN_VIDEO));
         movie.setVoteAverage(getDouble(cursor, MovieEntry.COLUMN_VOTE_AVERAGE));
         movie.setVoteCount(getLong(cursor, MovieEntry.COLUMN_VOTE_COUNT));
+        movie.setFavorite(true);
         return movie;
     }
 

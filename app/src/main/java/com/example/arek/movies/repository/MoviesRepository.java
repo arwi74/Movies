@@ -1,8 +1,11 @@
 package com.example.arek.movies.repository;
 
 import android.app.Application;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.SystemClock;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.arek.movies.api.MovieDbApi;
@@ -14,9 +17,8 @@ import com.example.arek.movies.utils.DbUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -99,25 +101,22 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     private Observable<List<Movie>> getFavoriteMovies() {
-        MovieDbHelper db = new MovieDbHelper(mApp);
-        return Observable.just(db)
-                .subscribeOn(Schedulers.io())
-                .map(db1 -> fakeArray(db1))
-                .map(movies -> setFavoritesMovies(movies,getFavoriteId()));
+        ContentResolver contentResolver = mApp.getContentResolver();
+        getMoviesFromDb(contentResolver);
 
+        return Observable.just(contentResolver)
+                .subscribeOn(Schedulers.io())
+                .map(cr -> getMoviesFromDb(cr));
     }
 
-    private List<Movie> fakeArray(MovieDbHelper db){
+    private List<Movie> getMoviesFromDb(ContentResolver contentResolver){
         List<Movie> movies = new ArrayList<>();
-
-
-        Cursor cursor = db.getReadableDatabase().query(MovieDbContract.MovieEntry.TABLE_NAME,
-                null,
-                null,
+        Cursor cursor = contentResolver.query(MovieDbContract.MovieEntry.CONTENT_URI,
                 null,
                 null,
                 null,
                 null);
+
         while (cursor.moveToNext()){
             movies.add(DbUtils.CursorToMovie(cursor));
         }
@@ -127,25 +126,24 @@ public class MoviesRepository implements MoviesDataSource {
 
     @Override
     public void saveFavoriteMovie(Movie movie) {
-        // todo make async and contentprovider queries
-        mFavoriteIds.add(movie.getId());
-        MovieDbHelper db = new MovieDbHelper(mApp);
-        db.getWritableDatabase().insert(MovieDbContract.MovieEntry.TABLE_NAME,
-                null,
-                DbUtils.movieToContentValues(movie));
+        ContentValues values = DbUtils.movieToContentValues(movie);
+        AsyncQueryHandler handler = new MovieAsyncQuery(mApp.getContentResolver());
+        handler.startInsert(1,null, MovieDbContract.MovieEntry.CONTENT_URI, values);
+
+        mApp.getContentResolver().insert(MovieDbContract.MovieEntry.CONTENT_URI, values);
     }
 
     @Override
     public void deleteFavoriteMovie(Movie movie) {
-        removeFavoriteFormCache(movie.getId());
-        MovieDbHelper db = new MovieDbHelper(mApp);
+        removeFavoriteFromCache(movie.getId());
         long id = movie.getId();
-        db.getWritableDatabase().delete(MovieDbContract.MovieEntry.TABLE_NAME,
-                MovieDbContract.MovieEntry._ID+"=?",
-                new String[]{String.valueOf(id)});
+        AsyncQueryHandler handler = new MovieAsyncQuery(mApp.getContentResolver());
+        handler.startDelete(1,null,MovieDbContract.MovieEntry.buildMovieUri(id),
+                null,
+                null);
     }
 
-    private void removeFavoriteFormCache(long id) {
+    private void removeFavoriteFromCache(long id) {
         if ( mFavoriteIds != null ){
             while (mFavoriteIds.contains(id))
                 mFavoriteIds.remove(id);
@@ -162,17 +160,14 @@ public class MoviesRepository implements MoviesDataSource {
 
     private boolean hasSortModePages() { return mSortType != Movie.SORT_MODE_FAVORITES; }
 
-    // todo change to contentResolver
+
     private List<Long> getFavoriteId() {
         if ( mFavoriteIds != null ) {
             return mFavoriteIds;
         }
         mFavoriteIds = new ArrayList<>();
-        MovieDbHelper db = new MovieDbHelper(mApp);
-        Cursor cursor = db.getReadableDatabase().query(MovieDbContract.MovieEntry.TABLE_NAME,
+        Cursor cursor = mApp.getContentResolver().query(MovieDbContract.MovieEntry.CONTENT_URI,
                 new String[]{MovieDbContract.MovieEntry._ID},
-                null,
-                null,
                 null,
                 null,
                 null);
@@ -193,6 +188,13 @@ public class MoviesRepository implements MoviesDataSource {
             }
         }
         return movies;
+    }
+
+    private static class MovieAsyncQuery extends AsyncQueryHandler{
+        public MovieAsyncQuery(ContentResolver cr) {
+            super(cr);
+
+        }
     }
 
 }

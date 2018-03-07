@@ -26,6 +26,10 @@
             android:name=".movieDetail.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".moviesList.MainActivity"/>
+        <provider
+            android:authorities="com.example.arek.movies.app"
+            android:name=".repository.db.MoviesProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

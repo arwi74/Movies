@@ -108,13 +108,13 @@ public class MainActivity extends AppCompatActivity implements
         mRecycler.setAdapter(mAdapter);
         mRecycler.setLayoutManager(new GridLayoutManager(this, numRows));
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 int itemCount = layoutManager.getItemCount();
+
                 if (itemCount > 0 && (lastVisibleItem > itemCount - 4) && !mLoading) {
                     Log.d(LOG_TAG, "loading more request");
                     mPresenter.loadMoreMovies(mSortMode);
