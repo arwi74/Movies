@@ -133,10 +133,19 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void showTitle() {
-        if (mSortMode == Movie.SORT_MODE_POPULAR) {
-            mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_popular));
-        } else {
-            mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_top_rated));
+        switch (mSortMode) {
+            case Movie.SORT_MODE_FAVORITES: {
+                mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_favorites));
+                break;
+            }
+            case Movie.SORT_MODE_POPULAR: {
+                mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_popular));
+                break;
+            }
+            case Movie.SORT_MODE_TOP_RATED: {
+                mBinding.mainTitleInfo.setText(getString(R.string.main_activity_title_top_rated));
+                break;
+            }
         }
     }
 

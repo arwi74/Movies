@@ -8,6 +8,7 @@
     <string name="mainActivityTitle">Movies</string>
     <string name="main_activity_title_popular">popular</string>
     <string name="main_activity_title_top_rated">top rated</string>
+    <string name="main_activity_title_favorites">favorite</string>
     <string name="load_error_message">Ups, we have problem with load data</string>
     <string name="detail_backdrop_description">Movie scene</string>
     <string name="detail_poster_description">Movie poster</string>

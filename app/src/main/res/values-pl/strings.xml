@@ -9,6 +9,8 @@
     <string name="mainActivityTitle">Movies</string>
     <string name="main_activity_title_popular">popularne</string>
     <string name="main_activity_title_top_rated">najwyżej oceniane</string>
+    <string name="main_activity_title_favorites">ulubione</string>
+
     <string name="load_error_message">Ups, mamy problem z załadowaniem danych</string>
 
     <string name="detail_backdrop_description">Scena z filmu</string>

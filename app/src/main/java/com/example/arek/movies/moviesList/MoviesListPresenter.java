@@ -88,4 +88,8 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
             }
         };
     }
+
+    public void onMovieUpdate(Movie movie){
+
+    }
 }

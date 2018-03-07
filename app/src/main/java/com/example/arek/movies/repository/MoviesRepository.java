@@ -193,7 +193,6 @@ public class MoviesRepository implements MoviesDataSource {
     private static class MovieAsyncQuery extends AsyncQueryHandler{
         public MovieAsyncQuery(ContentResolver cr) {
             super(cr);
-
         }
     }
 

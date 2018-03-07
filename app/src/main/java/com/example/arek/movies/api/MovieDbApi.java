@@ -5,6 +5,7 @@ import com.example.arek.movies.model.MovieDbResult;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -23,6 +24,17 @@ public interface MovieDbApi {
     @GET("/3/movie/top_rated")
     Observable<MovieDbResult> getMoviesTopRated(
             @Query("page")int page,
+            @Query("language")String language);
+
+    @GET("/3/movie/{id}/reviews")
+    Observable<MovieDbResult> getReviews(
+            @Path("id")long id,
+            @Query("page")int page,
+            @Query("language")String language);
+
+    @GET("/3/movie/{id}/videos")
+    Observable<MovieDbResult> getVideos(
+            @Path("id")long id,
             @Query("language")String language);
 
 }
