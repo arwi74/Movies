@@ -1,0 +1,26 @@
+<layout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.example.arek.movies.movieDetail.VideosFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/videos_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"/>
+
+    <ProgressBar
+        android:id="@+id/videos_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/videos_no_videos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</FrameLayout>
+</layout>

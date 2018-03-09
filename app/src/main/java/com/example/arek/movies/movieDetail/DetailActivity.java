@@ -1,6 +1,7 @@
 package com.example.arek.movies.movieDetail;
 
 import android.app.Application;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -59,13 +60,16 @@ public class DetailActivity extends AppCompatActivity {
         showDetail(movie);
         Log.d("DetailActivity",movie.getGenreIds().toString());
 
-        mVideosRepository.getVideos(movie.getId())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableVideoObserver());
+
 
         mReviewsRepository.getReviews(movie.getId(),true)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getDisposableReviewObserver());
+
+       getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.detail_videos_fragment,VideosFragment.newInstance(movie.getId()))
+                .commit();
 
     }
 
@@ -127,27 +131,4 @@ public class DetailActivity extends AppCompatActivity {
         };
     }
 
-    private DisposableObserver<List<Video>> getDisposableVideoObserver(){
-        return new DisposableObserver<List<Video>>() {
-            @Override
-            public void onNext(List<Video> videos) {
-                for (Video video: videos){
-                    mBinding.content.videos.append( video.getName() );mBinding.content.reviews.append("\n");
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
-
-
-}
+ }

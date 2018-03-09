@@ -1,6 +1,7 @@
 package com.example.arek.movies.di;
 
 import com.example.arek.movies.movieDetail.DetailActivity;
+import com.example.arek.movies.movieDetail.VideosFragment;
 import com.example.arek.movies.moviesList.MainActivity;
 
 import javax.inject.Singleton;
@@ -16,4 +17,5 @@ import dagger.Component;
 public interface RepositoryComponent {
     void inject(MainActivity activity);
     void inject(DetailActivity activity);
+    void inject(VideosFragment fragment);
 }
