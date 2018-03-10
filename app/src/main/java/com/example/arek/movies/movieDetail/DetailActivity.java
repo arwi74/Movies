@@ -62,13 +62,15 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
-        mReviewsRepository.getReviews(movie.getId(),true)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableReviewObserver());
 
        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.detail_videos_fragment,VideosFragment.newInstance(movie.getId()))
+               .commit();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.detail_reviews_fragment,ReviewsFragment.newInstance(movie.getId()))
                 .commit();
 
     }
@@ -100,35 +102,6 @@ public class DetailActivity extends AppCompatActivity {
                 .into(mBinding.toolbarImage);
     }
 
-    private DisposableObserver<List<Review>> getDisposableReviewObserver(){
-        return new DisposableObserver<List<Review>>() {
-            @Override
-            public void onNext(List<Review> reviews) {
-                for (Review review: reviews){
-                    mBinding.content.reviews.append("\n");
-                    mBinding.content.reviews.append( review.getAuthor() );
-                    mBinding.content.reviews.append("\n");
-                    mBinding.content.reviews.append( review.getContent() );
-                    mBinding.content.reviews.append("\n");
-                    mBinding.content.reviews.append( "   " );
-                    mBinding.content.reviews.append("\n");
-                    mBinding.content.reviews.append( "***" );
-                    mBinding.content.reviews.append("\n");
-                    mBinding.content.reviews.append( "   " );
-                    mBinding.content.reviews.append("\n");
-                }
-            }
 
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-    }
 
  }

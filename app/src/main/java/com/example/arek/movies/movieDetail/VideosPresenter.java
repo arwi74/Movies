@@ -11,6 +11,7 @@ import com.example.arek.movies.repository.VideosRepository;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -36,7 +37,7 @@ public class VideosPresenter implements VideosContract.Presenter {
     public void loadVideos(long movieId) {
         mView.showProgressBar();
         mRepository.getVideos(movieId)
-        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(getDisposableObserver());
     }
 
