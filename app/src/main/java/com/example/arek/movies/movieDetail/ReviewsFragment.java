@@ -88,7 +88,7 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
         mAdapter = new ReviewsAdapter();
         RecyclerView recycler = mBinding.reviewsRecyclerView;
         recycler.setLayoutManager(
-                new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recycler.setAdapter(mAdapter);
     }
 

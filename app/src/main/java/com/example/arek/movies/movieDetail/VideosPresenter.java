@@ -12,6 +12,7 @@ import com.example.arek.movies.repository.VideosRepository;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 public class VideosPresenter implements VideosContract.Presenter {
     private VideosContract.View mView;
     private VideosRepository mRepository;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
 
     public VideosPresenter(@NonNull VideosRepository videoRepository){
@@ -32,14 +34,19 @@ public class VideosPresenter implements VideosContract.Presenter {
     public void takeView(VideosContract.View view) { mView = view; }
 
     @Override
-    public void dropView() { mView=null; }
+    public void dropView() {
+        if ( !mCompositeDisposable.isDisposed() )
+            mCompositeDisposable.dispose();
+        mView=null; }
 
     @Override
     public void loadVideos(long movieId) {
+        DisposableObserver disposable = getDisposableObserver();
         mView.showProgressBar();
         mRepository.getVideos(movieId)
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(getDisposableObserver());
+        .subscribe(disposable);
+        mCompositeDisposable.add(disposable);
     }
 
     @Override

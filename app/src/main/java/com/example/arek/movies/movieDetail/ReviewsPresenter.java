@@ -9,6 +9,8 @@ import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -20,6 +22,7 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
     private ReviewsRepository mReviewsRepository;
     private ReviewsContract.View mView;
     private long mMovieId;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public ReviewsPresenter(@NonNull ReviewsRepository reviewsRepository) {
         mReviewsRepository = reviewsRepository;
@@ -32,23 +35,29 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
 
     @Override
     public void dropView() {
+        if ( !mCompositeDisposable.isDisposed() )
+        mCompositeDisposable.dispose();
         mView = null;
     }
 
     @Override
     public void loadReviews(long movieId) {
+        DisposableObserver disposable = getDisposableObserver();
         mMovieId = movieId;
         mView.showProgressBar();
         mReviewsRepository.getReviews(mMovieId,true)
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .subscribe(getDisposableObserver());
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(disposable);
+        mCompositeDisposable.add(disposable);
     }
 
     private void loadMoreReviews() {
+        DisposableObserver disposable = getDisposableObserver();
         if ( mMovieId == 0 ) return;
         mReviewsRepository.getReviews(mMovieId,true)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableObserver());
+                .subscribe(disposable);
+        mCompositeDisposable.add(disposable);
     }
 
     private DisposableObserver<List<Review>> getDisposableObserver() {

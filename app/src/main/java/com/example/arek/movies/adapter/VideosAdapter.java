@@ -25,9 +25,11 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     public static final String YOUTUBE_IMAGE_VARIANT = "0.jpg";
     List<Video> mVideos = new ArrayList<>();
     VideosAdapterOnClickListener mVideosOnClickListener;
+    private Context mContext;
 
-    public VideosAdapter(VideosAdapterOnClickListener videosAdapterOnClickListener){
+    public VideosAdapter(VideosAdapterOnClickListener videosAdapterOnClickListener, Context context){
         mVideosOnClickListener = videosAdapterOnClickListener;
+        mContext = context;
     }
 
 
@@ -51,8 +53,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
         Uri uri = buildVideoUri(video.getKey());
 
-        GlideApp.with(holder.itemView)
+        GlideApp.with(mContext)
                 .load(uri)
+                .error(R.drawable.ic_broken_image_grey_24dp)
                 .into(holder.videoImage);
 
     }

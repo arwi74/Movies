@@ -85,7 +85,7 @@ public class VideosFragment extends Fragment implements
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_videos, container,false);
         setRecyclerView();
-        mVideoAdapter = new VideosAdapter(this);
+        mVideoAdapter = new VideosAdapter(this, getActivity());
         mRecyclerView.setAdapter(mVideoAdapter);
         ((MoviesApp) getActivity().getApplication()).getRepositoryComponent().inject(this);
 
