@@ -46,6 +46,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
     public void addReviews(List<Review> reviews){
         if ( reviews == null || reviews.isEmpty() ) return;
         mReviews.addAll(reviews);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

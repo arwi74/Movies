@@ -80,7 +80,7 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
         mPresenter = new ReviewsPresenter(mReviewsRepository);
         mPresenter.takeView(this);
         mPresenter.loadReviews(mMovieId);
-
+        setRecyclerView();
         return mBinding.getRoot();
     }
 
