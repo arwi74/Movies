@@ -1,4 +1,4 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.reviews;
 
 import com.example.arek.movies.BasePresenter;
 import com.example.arek.movies.model.Review;

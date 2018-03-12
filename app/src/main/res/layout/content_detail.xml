@@ -4,22 +4,23 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="0dp">
 
         <TextView
             android:id="@+id/detail_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/detail_right_margin"
-            android:layout_marginLeft="@dimen/detail_item_space"
             android:layout_marginRight="@dimen/detail_right_margin"
             android:layout_marginStart="@dimen/detail_item_space"
+            android:layout_marginLeft="@dimen/detail_item_space"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detail_poster"
-            app:layout_constraintTop_toTopOf="@+id/detail_poster"
-            />
+            app:layout_constraintTop_toTopOf="@+id/detail_poster" />
 
         <TextView
             android:id="@+id/detail_release_date_label"
@@ -84,10 +85,6 @@
             android:id="@+id/detail_vote_average"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/detail_right_margin"
-            android:layout_marginLeft="@dimen/detail_item_space"
-            android:layout_marginRight="@dimen/detail_right_margin"
-            android:layout_marginStart="@dimen/detail_item_space"
             android:fontFamily="sans-serif-light"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,14 +96,15 @@
             android:id="@+id/detail_overview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/detail_right_margin"
-            android:layout_marginRight="@dimen/detail_right_margin"
+            android:layout_marginEnd="@dimen/detail_margin_right"
+            android:layout_marginRight="@dimen/detail_margin_right"
             android:layout_marginStart="@dimen/detail_margin_left"
             android:layout_marginLeft="@dimen/detail_margin_left"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/barrier2"/>
+            app:layout_constraintTop_toTopOf="@+id/barrier2" />
 
         <android.support.constraint.Barrier
             android:id="@+id/barrier2"
@@ -120,15 +118,22 @@
             android:id="@+id/detail_videos_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginLeft="@dimen/detail_margin_left"
             android:text="@string/detail_videos_label"
-            android:textColor="@color/colorAccent"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintTop_toBottomOf="@+id/detail_overview"/>
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_overview" />
 
         <View
             android:id="@+id/detail_videos_label_line"
             android:layout_width="0dp"
             android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/detail_margin_left"
+            android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginEnd="@dimen/detail_margin_right"
+            android:layout_marginRight="@dimen/detail_margin_right"
             android:background="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +143,7 @@
         <FrameLayout
             android:id="@+id/detail_videos_fragment"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -148,14 +153,44 @@
             app:layout_constraintTop_toBottomOf="@+id/detail_videos_label_line" />
 
 
+        <TextView
+            android:id="@+id/detail_reviews_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginLeft="@dimen/detail_margin_left"
+            android:text="@string/detail_reviews_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_videos_fragment" />
+
+        <View
+            android:id="@+id/detail_reviews_label_line"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/detail_margin_left"
+            android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginEnd="@dimen/detail_margin_right"
+            android:layout_marginRight="@dimen/detail_margin_right"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_reviews_label"
+            />
+
+
         <FrameLayout
             android:id="@+id/detail_reviews_fragment"
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/detail_margin_left"
+            android:layout_marginStart="@dimen/detail_margin_left"
+            android:layout_marginEnd="@dimen/detail_margin_right"
+            android:layout_marginRight="@dimen/detail_margin_right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@+id/detail_videos_fragment" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_reviews_label_line" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.videos;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -14,7 +14,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Arkadiusz Wilczek on 09.03.18.

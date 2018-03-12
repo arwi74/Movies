@@ -1,7 +1,6 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.videos;
 
 import android.content.Context;
-import android.net.Uri;
 
 import com.example.arek.movies.BasePresenter;
 import com.example.arek.movies.model.Video;

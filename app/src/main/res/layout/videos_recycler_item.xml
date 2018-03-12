@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="3dp">
 
     <TextView
         android:id="@+id/item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"/>
+        android:layout_gravity="top"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_video_image"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/item_video_image"
         android:layout_width="252dp"
         android:layout_height="140dp"
-        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:layout_marginTop="20dp"
-        android:padding="5dp"/>
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/item_play_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_play_circle_outline_white_24dp"/>
-</FrameLayout>
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_play_circle_outline_white_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/item_video_image"
+        app:layout_constraintEnd_toEndOf="@+id/item_video_image"
+        app:layout_constraintStart_toStartOf="@+id/item_video_image"
+        app:layout_constraintTop_toTopOf="@+id/item_video_image" />
+</android.support.constraint.ConstraintLayout>

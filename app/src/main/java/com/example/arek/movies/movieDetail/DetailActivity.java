@@ -1,7 +1,5 @@
 package com.example.arek.movies.movieDetail;
 
-import android.app.Application;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -13,10 +11,9 @@ import android.util.Log;
 
 import com.example.arek.movies.MoviesApp;
 import com.example.arek.movies.R;
-import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.databinding.ActivityDetailBinding;
-import com.example.arek.movies.model.Review;
-import com.example.arek.movies.model.Video;
+import com.example.arek.movies.movieDetail.reviews.ReviewsFragment;
+import com.example.arek.movies.movieDetail.videos.VideosFragment;
 import com.example.arek.movies.moviesList.MainActivity;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.repository.ReviewsRepository;
@@ -24,13 +21,9 @@ import com.example.arek.movies.repository.VideosRepository;
 import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
 
 public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding mBinding;
@@ -65,12 +58,12 @@ public class DetailActivity extends AppCompatActivity {
 
        getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.detail_videos_fragment,VideosFragment.newInstance(movie.getId()))
+                .replace(R.id.detail_videos_fragment, VideosFragment.newInstance(movie.getId()))
                .commit();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.detail_reviews_fragment,ReviewsFragment.newInstance(movie.getId()))
+                .replace(R.id.detail_reviews_fragment, ReviewsFragment.newInstance(movie.getId()))
                 .commit();
 
     }

@@ -1,10 +1,8 @@
 package com.example.arek.movies.di;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.example.arek.movies.movieDetail.DetailActivity;
-import com.example.arek.movies.movieDetail.ReviewsFragment;
-import com.example.arek.movies.movieDetail.VideosFragment;
+import com.example.arek.movies.movieDetail.reviews.ReviewsFragment;
+import com.example.arek.movies.movieDetail.videos.VideosFragment;
 import com.example.arek.movies.moviesList.MainActivity;
 
 import javax.inject.Singleton;

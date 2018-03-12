@@ -1,4 +1,4 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.videos;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -7,16 +7,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.arek.movies.MoviesApp;
 import com.example.arek.movies.R;
-import com.example.arek.movies.adapter.ReviewsAdapter;
-import com.example.arek.movies.databinding.FragmentReviewsBinding;
-import com.example.arek.movies.model.Review;
-import com.example.arek.movies.repository.ReviewsRepository;
+import com.example.arek.movies.adapter.VideosAdapter;
+import com.example.arek.movies.databinding.FragmentVideosBinding;
+import com.example.arek.movies.model.Video;
+import com.example.arek.movies.repository.VideosRepository;
 
 import java.util.List;
 
@@ -25,23 +26,30 @@ import javax.inject.Inject;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReviewsFragment.OnFragmentInteractionListener} interface
+ * {@link VideosFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReviewsFragment#newInstance} factory method to
+ * Use the {@link VideosFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReviewsFragment extends Fragment implements ReviewsContract.View{
+public class VideosFragment extends Fragment implements
+        VideosContract.View,
+        VideosAdapter.VideosAdapterOnClickListener{
     private static final String ARG_MOVIE_ID = "param1";
-    private FragmentReviewsBinding mBinding;
+    private  static final String LOG_TAG = VideosFragment.class.getSimpleName();
+
     private long mMovieId;
-    private ReviewsPresenter mPresenter;
-    private ReviewsAdapter mAdapter;
-    @Inject
-    public ReviewsRepository mReviewsRepository;
 
     private OnFragmentInteractionListener mListener;
 
-    public ReviewsFragment() {
+    private FragmentVideosBinding mBinding;
+    private RecyclerView mRecyclerView;
+    private VideosAdapter mVideoAdapter;
+    @Inject
+    public VideosRepository mVideoRepository;
+    private VideosContract.Presenter mPresenter;
+
+    public VideosFragment() {
+        // Required empty public constructor
     }
 
     /**
@@ -49,11 +57,11 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment ReviewsFragment.
+     * @return A new instance of fragment VideosFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ReviewsFragment newInstance(long param1) {
-        ReviewsFragment fragment = new ReviewsFragment();
+
+    public static VideosFragment newInstance(long param1) {
+        VideosFragment fragment = new VideosFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_MOVIE_ID, param1);
         fragment.setArguments(args);
@@ -71,25 +79,56 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_reviews,container,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_videos, container,false);
         setRecyclerView();
+        mVideoAdapter = new VideosAdapter(this, getActivity());
+        mRecyclerView.setAdapter(mVideoAdapter);
+        ((MoviesApp) getActivity().getApplication()).getRepositoryComponent().inject(this);
 
-        ((MoviesApp)getActivity().getApplication()).getRepositoryComponent().inject(this);
+//        LinearSnapHelper helper = new LinearSnapHelper();
+//        helper.attachToRecyclerView(mRecyclerView);
 
-        mPresenter = new ReviewsPresenter(mReviewsRepository);
+        mPresenter = new VideosPresenter(mVideoRepository);
         mPresenter.takeView(this);
-        mPresenter.loadReviews(mMovieId);
-        setRecyclerView();
+        mPresenter.loadVideos(mMovieId);
+        Log.d(LOG_TAG,"videos create");
         return mBinding.getRoot();
     }
 
-    private void setRecyclerView() {
-        mAdapter = new ReviewsAdapter();
-        RecyclerView recycler = mBinding.reviewsRecyclerView;
-        recycler.setLayoutManager(
-                new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-        recycler.setAdapter(mAdapter);
+    @Override
+    public void showVideos(List<Video> videos){
+        for (Video video: videos){
+            Log.d(LOG_TAG,video.getName());
+        }
+        mVideoAdapter.addVideos(videos);
+    }
+
+    @Override
+    public void showProgressBar(){
+        mBinding.videosProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar(){
+        mBinding.videosProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoVideosImage(){
+        mBinding.videosNoVideos.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoVideosImage() {
+        mBinding.videosNoVideos.setVisibility(View.GONE);
+    }
+
+    private void setRecyclerView(){
+        mRecyclerView = mBinding.videosRecyclerView;
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        //mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+      //  mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -102,13 +141,13 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
+
     }
 
     @Override
@@ -119,33 +158,8 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
     }
 
     @Override
-    public void showProgressBar() {
-        mBinding.reviewsProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgressBar() {
-        mBinding.reviewsProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showNoReviewsInfo() {
-        mBinding.reviewsNoReviewsImage.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideNoReviewsInfo() {
-        mBinding.reviewsNoReviewsImage.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showReviews(List<Review> reviews) {
-        mAdapter.addReviews(reviews);
-    }
-
-    @Override
-    public void showMoreReviews(List<Review> reviews) {
-        mAdapter.addReviews(reviews);
+    public void onVideoClick(String videoKey) {
+        mPresenter.openVideo(getActivity(), videoKey);
     }
 
     /**

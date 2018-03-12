@@ -2,23 +2,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.arek.movies.movieDetail.ReviewsFragment">
+    android:layout_height="wrap_content"
+    android:minHeight="100dp"
+    tools:context="com.example.arek.movies.movieDetail.reviews.ReviewsFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reviews_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
     <ProgressBar
         android:id="@+id/reviews_progress_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
     <ImageView
         android:id="@+id/reviews_no_reviews_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_broken_image_grey_24dp"
+        android:layout_gravity="center"/>
 
 </FrameLayout>
 </layout>

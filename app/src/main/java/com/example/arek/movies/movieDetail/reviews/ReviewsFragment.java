@@ -1,27 +1,22 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.reviews;
 
-import android.app.Application;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.arek.movies.MoviesApp;
 import com.example.arek.movies.R;
-import com.example.arek.movies.adapter.VideosAdapter;
-import com.example.arek.movies.databinding.FragmentVideosBinding;
-import com.example.arek.movies.model.Video;
+import com.example.arek.movies.adapter.ReviewsAdapter;
+import com.example.arek.movies.databinding.FragmentReviewsBinding;
+import com.example.arek.movies.model.Review;
 import com.example.arek.movies.repository.ReviewsRepository;
-import com.example.arek.movies.repository.VideosRepository;
 
 import java.util.List;
 
@@ -30,30 +25,23 @@ import javax.inject.Inject;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link VideosFragment.OnFragmentInteractionListener} interface
+ * {@link ReviewsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link VideosFragment#newInstance} factory method to
+ * Use the {@link ReviewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VideosFragment extends Fragment implements
-        VideosContract.View,
-        VideosAdapter.VideosAdapterOnClickListener{
+public class ReviewsFragment extends Fragment implements ReviewsContract.View{
     private static final String ARG_MOVIE_ID = "param1";
-    private  static final String LOG_TAG = VideosFragment.class.getSimpleName();
-
+    private FragmentReviewsBinding mBinding;
     private long mMovieId;
+    private ReviewsPresenter mPresenter;
+    private ReviewsAdapter mAdapter;
+    @Inject
+    public ReviewsRepository mReviewsRepository;
 
     private OnFragmentInteractionListener mListener;
 
-    private FragmentVideosBinding mBinding;
-    private RecyclerView mRecyclerView;
-    private VideosAdapter mVideoAdapter;
-    @Inject
-    public VideosRepository mVideoRepository;
-    private VideosContract.Presenter mPresenter;
-
-    public VideosFragment() {
-        // Required empty public constructor
+    public ReviewsFragment() {
     }
 
     /**
@@ -61,11 +49,11 @@ public class VideosFragment extends Fragment implements
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment VideosFragment.
+     * @return A new instance of fragment ReviewsFragment.
      */
-
-    public static VideosFragment newInstance(long param1) {
-        VideosFragment fragment = new VideosFragment();
+    // TODO: Rename and change types and number of parameters
+    public static ReviewsFragment newInstance(long param1) {
+        ReviewsFragment fragment = new ReviewsFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_MOVIE_ID, param1);
         fragment.setArguments(args);
@@ -83,56 +71,25 @@ public class VideosFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_videos, container,false);
+        // Inflate the layout for this fragment
+        mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_reviews,container,false);
         setRecyclerView();
-        mVideoAdapter = new VideosAdapter(this, getActivity());
-        mRecyclerView.setAdapter(mVideoAdapter);
-        ((MoviesApp) getActivity().getApplication()).getRepositoryComponent().inject(this);
 
-//        LinearSnapHelper helper = new LinearSnapHelper();
-//        helper.attachToRecyclerView(mRecyclerView);
+        ((MoviesApp)getActivity().getApplication()).getRepositoryComponent().inject(this);
 
-        mPresenter = new VideosPresenter(mVideoRepository);
+        mPresenter = new ReviewsPresenter(mReviewsRepository);
         mPresenter.takeView(this);
-        mPresenter.loadVideos(mMovieId);
-        Log.d(LOG_TAG,"videos create");
+        mPresenter.loadReviews(mMovieId);
+        setRecyclerView();
         return mBinding.getRoot();
     }
 
-    @Override
-    public void showVideos(List<Video> videos){
-        for (Video video: videos){
-            Log.d(LOG_TAG,video.getName());
-        }
-        mVideoAdapter.addVideos(videos);
-    }
-
-    @Override
-    public void showProgressBar(){
-        mBinding.videosProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgressBar(){
-        mBinding.videosProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showNoVideosImage(){
-        mBinding.videosNoVideos.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideNoVideosImage() {
-        mBinding.videosNoVideos.setVisibility(View.GONE);
-    }
-
-    private void setRecyclerView(){
-        mRecyclerView = mBinding.videosRecyclerView;
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-        //mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-      //  mRecyclerView.setNestedScrollingEnabled(false);
+    private void setRecyclerView() {
+        mAdapter = new ReviewsAdapter();
+        RecyclerView recycler = mBinding.reviewsRecyclerView;
+        recycler.setLayoutManager(
+                new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        recycler.setAdapter(mAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -145,13 +102,13 @@ public class VideosFragment extends Fragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
-
     }
 
     @Override
@@ -162,8 +119,33 @@ public class VideosFragment extends Fragment implements
     }
 
     @Override
-    public void onVideoClick(String videoKey) {
-        mPresenter.openVideo(getActivity(), videoKey);
+    public void showProgressBar() {
+        mBinding.reviewsProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mBinding.reviewsProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoReviewsInfo() {
+        mBinding.reviewsNoReviewsImage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoReviewsInfo() {
+        mBinding.reviewsNoReviewsImage.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showReviews(List<Review> reviews) {
+        mAdapter.addReviews(reviews);
+    }
+
+    @Override
+    public void showMoreReviews(List<Review> reviews) {
+        mAdapter.addReviews(reviews);
     }
 
     /**

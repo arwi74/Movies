@@ -1,18 +1,16 @@
-package com.example.arek.movies.movieDetail;
+package com.example.arek.movies.movieDetail.reviews;
 
 import android.support.annotation.NonNull;
 
 import com.example.arek.movies.model.Review;
+import com.example.arek.movies.movieDetail.reviews.ReviewsContract;
 import com.example.arek.movies.repository.ReviewsRepository;
 
 import java.util.List;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Arkadiusz Wilczek on 10.03.18.
@@ -45,6 +43,7 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
         DisposableObserver disposable = getDisposableObserver();
         mMovieId = movieId;
         mView.showProgressBar();
+        mView.hideNoReviewsInfo();
         mReviewsRepository.getReviews(mMovieId,true)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(disposable);
@@ -54,7 +53,7 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
     private void loadMoreReviews() {
         DisposableObserver disposable = getDisposableObserver();
         if ( mMovieId == 0 ) return;
-        mReviewsRepository.getReviews(mMovieId,true)
+        mReviewsRepository.getReviews(mMovieId,false)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(disposable);
         mCompositeDisposable.add(disposable);
@@ -67,8 +66,8 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
                 if ( reviews.isEmpty() ) mView.showNoReviewsInfo();
                 mView.showReviews(reviews);
                 if ( mReviewsRepository.isMoreReviews() ){
-               //     loadMoreReviews();
-                    mView.hideProgressBar();
+                    loadMoreReviews();
+               //     mView.hideProgressBar();
                 } else{
                     mView.hideProgressBar();
                 }
