@@ -26,7 +26,10 @@
         android:layout_gravity="bottom"
         android:gravity="bottom"
         android:visibility="visible"
-        android:padding="@dimen/recycler_item_title_padding"
+        android:paddingTop="@dimen/recycler_item_title_padding"
+        android:paddingLeft="@dimen/recycler_item_title_padding"
+        android:paddingBottom="@dimen/recycler_item_title_padding"
+        android:paddingRight="30dp"
         android:textColor="@android:color/white"
         android:background="@drawable/gradient_background"
         />
@@ -49,6 +52,7 @@
         android:id="@+id/item_favorite_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:src="@drawable/ic_favorite_border_white_24dp"
         android:layout_gravity="bottom|right"/>
 
