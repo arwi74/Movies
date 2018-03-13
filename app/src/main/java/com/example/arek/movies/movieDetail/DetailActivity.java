@@ -35,6 +35,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailCont
     @Inject
     public MoviesRepository mMovieRepository;
     private MovieDetailContract.Presenter mPresenter;
+    private Movie mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,24 +53,23 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailCont
         }
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra(MainActivity.EXTRA_DETAIL_MOVIE);
+        mMovie = intent.getParcelableExtra(MainActivity.EXTRA_DETAIL_MOVIE);
 
-        mPresenter = new MovieDetailPresenter(mMovieRepository, movie);
+        mPresenter = new MovieDetailPresenter(mMovieRepository, mMovie);
         mPresenter.takeView(this);
         mPresenter.getMovieDetail();
 
         getSupportFragmentManager()
                .beginTransaction()
-               .replace(R.id.detail_videos_fragment, VideosFragment.newInstance(movie.getId()))
-               .replace(R.id.detail_reviews_fragment, ReviewsFragment.newInstance(movie.getId()))
+               .replace(R.id.detail_videos_fragment, VideosFragment.newInstance(mMovie.getId()))
+               .replace(R.id.detail_reviews_fragment, ReviewsFragment.newInstance(mMovie.getId()))
                .commit();
 
-        setFloatingFavoritesButton(movie);
+        setFloatingFavoritesButton();
 
     }
 
-    private void setFloatingFavoritesButton(Movie movie) {
-        setFavoriteButtonIcon(movie.isFavorite());
+    private void setFloatingFavoritesButton() {
         mBinding.detailFavoriteButton
                 .setOnClickListener(v -> mPresenter.changeStateFavoriteMovie());
     }
@@ -114,6 +114,14 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailCont
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(MainActivity.EXTRA_DETAIL_MOVIE, mMovie);
+        setResult(MainActivity.CODE_REQUEST_FROM_DETAIL, returnIntent);
+        super.onBackPressed();
     }
 
     @Override

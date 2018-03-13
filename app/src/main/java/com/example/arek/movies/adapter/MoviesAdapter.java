@@ -92,7 +92,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return 0;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         final ImageView poster;
         final TextView title;

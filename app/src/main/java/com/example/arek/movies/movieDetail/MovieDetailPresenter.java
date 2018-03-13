@@ -44,6 +44,7 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
     @Override
     public void getMovieDetail() {
         mView.showMovieDetails(mMovie);
+        mView.setFavoriteButtonIcon(mMovie.isFavorite());
         getGenres();
     }
 

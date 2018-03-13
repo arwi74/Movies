@@ -52,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String STATE_SCROLL_POSITION = "state_recycler_position";
     private static final String STATE_SORT_MODE = "state_sort_mode";
+
+    public static final int CODE_REQUEST_FROM_DETAIL = 5;
     private int mScrollPosition;
+    private Movie mDetailMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements
     private void openDetailActivity(Movie movie) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(EXTRA_DETAIL_MOVIE, movie);
-        startActivity(intent);
+        startActivityForResult(intent,CODE_REQUEST_FROM_DETAIL);
     }
 
     public void showMovies(List<Movie> movies) {
@@ -231,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onMovieClick(Movie movie) {
+        mDetailMovie = movie;
         openDetailActivity(movie);
     }
 
@@ -238,6 +242,19 @@ public class MainActivity extends AppCompatActivity implements
     public void onFavoriteClick(Movie movie) {
         mPresenter.setFavorite(movie);
         Toast.makeText(this, "save favorite", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ( requestCode == CODE_REQUEST_FROM_DETAIL ){
+            Movie movie = data.getParcelableExtra(EXTRA_DETAIL_MOVIE);
+                if ( mDetailMovie != null
+                        && mDetailMovie.isFavorite() != movie.isFavorite() ) {
+                    mDetailMovie.setFavorite(movie.isFavorite());
+                    mAdapter.notifyDataSetChanged();
+                }
+        }
     }
 
 }
