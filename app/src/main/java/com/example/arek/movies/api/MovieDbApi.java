@@ -1,5 +1,6 @@
 package com.example.arek.movies.api;
 
+import com.example.arek.movies.model.GenreResult;
 import com.example.arek.movies.model.MovieDbResult;
 import com.example.arek.movies.model.ReviewsResult;
 import com.example.arek.movies.model.VideoResult;
@@ -38,5 +39,10 @@ public interface MovieDbApi {
     Observable<VideoResult> getVideos(
             @Path("id")long id,
             @Query("language")String language);
+
+    @GET("/3/genre/movie/list")
+    Observable<GenreResult> getGenres(
+            @Query("language")String language
+    );
 
 }

@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.example.arek.movies.MoviesApp;
 import com.example.arek.movies.R;
@@ -16,21 +17,24 @@ import com.example.arek.movies.movieDetail.reviews.ReviewsFragment;
 import com.example.arek.movies.movieDetail.videos.VideosFragment;
 import com.example.arek.movies.moviesList.MainActivity;
 import com.example.arek.movies.model.Movie;
+import com.example.arek.movies.repository.MoviesRepository;
 import com.example.arek.movies.repository.ReviewsRepository;
 import com.example.arek.movies.repository.VideosRepository;
 import com.example.arek.movies.utils.GlideApp;
 import com.example.arek.movies.utils.UtilsImage;
-
 import java.util.Locale;
-
 import javax.inject.Inject;
 
-public class DetailActivity extends AppCompatActivity {
+
+public class DetailActivity extends AppCompatActivity implements MovieDetailContract.View{
     private ActivityDetailBinding mBinding;
     @Inject
     public VideosRepository mVideosRepository;
     @Inject
     public ReviewsRepository mReviewsRepository;
+    @Inject
+    public MoviesRepository mMovieRepository;
+    private MovieDetailContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,31 +54,37 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra(MainActivity.EXTRA_DETAIL_MOVIE);
 
-        showDetail(movie);
-        Log.d("DetailActivity",movie.getGenreIds().toString());
-
-
-
-
-       getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.detail_videos_fragment, VideosFragment.newInstance(movie.getId()))
-               .commit();
+        mPresenter = new MovieDetailPresenter(mMovieRepository, movie);
+        mPresenter.takeView(this);
+        mPresenter.getMovieDetail();
 
         getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.detail_reviews_fragment, ReviewsFragment.newInstance(movie.getId()))
-                .commit();
+               .beginTransaction()
+               .replace(R.id.detail_videos_fragment, VideosFragment.newInstance(movie.getId()))
+               .replace(R.id.detail_reviews_fragment, ReviewsFragment.newInstance(movie.getId()))
+               .commit();
 
+        setFloatingFavoritesButton(movie);
+
+    }
+
+    private void setFloatingFavoritesButton(Movie movie) {
+        setFavoriteButtonIcon(movie.isFavorite());
+        mBinding.detailFavoriteButton
+                .setOnClickListener(v -> mPresenter.changeStateFavoriteMovie());
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    public void setFavoriteButtonIcon(boolean favorite){
+        if ( favorite ) {
+            mBinding.detailFavoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp);
+        } else{
+            mBinding.detailFavoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+        }
     }
 
-    private void showDetail(Movie movie) {
+    @Override
+    public void showMovieDetails(Movie movie) {
         mBinding.content.detailTitle.setText(movie.getTitle());
         mBinding.collapsingToolbar.setTitle(movie.getTitle());
         mBinding.content.detailOverview.setText(movie.getOverview());
@@ -95,6 +105,20 @@ public class DetailActivity extends AppCompatActivity {
                 .into(mBinding.toolbarImage);
     }
 
+    @Override
+    public void showMovieGenres(String genres) {
+        mBinding.content.detailGenres.setText(genres);
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
- }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.dropView();
+    }
+}

@@ -174,10 +174,11 @@ public class Movie implements Parcelable{
     }
 
     private Movie(Parcel in){
-        boolean[] byteArray = new boolean[2];
+        boolean[] byteArray = new boolean[3];
         in.readBooleanArray(byteArray);
         adult = byteArray[0];
         video = byteArray[1];
+        favorite = byteArray[2];
         backdropPath = in.readString();
         originalLanguage = in.readString();
         originalTitle = in.readString();
@@ -198,7 +199,7 @@ public class Movie implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeBooleanArray(new boolean[]{adult,video});
+        dest.writeBooleanArray(new boolean[]{adult,video,favorite});
 
         dest.writeString(backdropPath);
         dest.writeString(originalLanguage);

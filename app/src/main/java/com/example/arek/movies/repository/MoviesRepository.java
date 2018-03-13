@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.arek.movies.api.MovieDbApi;
+import com.example.arek.movies.model.Genre;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.repository.db.MovieDbContract;
 import com.example.arek.movies.repository.db.MovieDbHelper;
@@ -26,13 +27,14 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class MoviesRepository implements MoviesDataSource {
-    private static final int MAX_PAGE_COUNT = 10;
+    private static final int MAX_PAGE_COUNT = 100;
     public MovieDbApi mMovieDbApi;
     int mSortType;
     int mPage;
     public Application mApp ;
     public static final String LOG_TAG = MoviesDataSource.class.getSimpleName();
 
+    private final List<Genre> mGenres = new ArrayList<>();
     private final List<Movie> mMoviesCache = new ArrayList<>();
     private List<Long> mFavoriteIds;
 
@@ -126,11 +128,12 @@ public class MoviesRepository implements MoviesDataSource {
 
     @Override
     public void saveFavoriteMovie(Movie movie) {
+        addFavoriteToCache(movie.getId());
         ContentValues values = DbUtils.movieToContentValues(movie);
         AsyncQueryHandler handler = new MovieAsyncQuery(mApp.getContentResolver());
         handler.startInsert(1,null, MovieDbContract.MovieEntry.CONTENT_URI, values);
 
-        mApp.getContentResolver().insert(MovieDbContract.MovieEntry.CONTENT_URI, values);
+       // mApp.getContentResolver().insert(MovieDbContract.MovieEntry.CONTENT_URI, values);
     }
 
     @Override
@@ -148,6 +151,10 @@ public class MoviesRepository implements MoviesDataSource {
             while (mFavoriteIds.contains(id))
                 mFavoriteIds.remove(id);
         }
+    }
+
+    private void addFavoriteToCache(Long id){
+        mFavoriteIds.add(id);
     }
 
     @Override
@@ -193,6 +200,28 @@ public class MoviesRepository implements MoviesDataSource {
     private static class MovieAsyncQuery extends AsyncQueryHandler{
         public MovieAsyncQuery(ContentResolver cr) {
             super(cr);
+        }
+    }
+
+    private Observable<List<Genre>> getGenresFromApi(){
+        return mMovieDbApi.getGenres("pl")
+                .subscribeOn(Schedulers.io())
+                .map(result -> result.getGenres())
+                .map(genres -> {
+                    mGenres.addAll(genres);
+                    return genres;
+                });
+    }
+
+    private Observable<List<Genre>> getGenresFromCache(){
+        return Observable.just(mGenres);
+    }
+
+    public Observable<List<Genre>> getGenres(){
+        if ( mGenres.isEmpty() ){
+            return getGenresFromApi();
+        } else {
+            return getGenresFromCache();
         }
     }
 

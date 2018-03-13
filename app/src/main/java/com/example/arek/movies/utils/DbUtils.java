@@ -2,8 +2,10 @@ package com.example.arek.movies.utils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.arek.movies.model.Genre;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.repository.db.MovieDbContract;
 import com.example.arek.movies.repository.db.MovieDbContract.MovieEntry;
@@ -119,5 +121,24 @@ public class DbUtils {
         return i > 0;
     }
 
+    private static String getGenre(@NonNull List<Genre> genres, int id){
+        for(Genre genre: genres){
+            if ( genre.getId() == id ){
+                return genre.getName();
+            }
+        }
+        return "";
+    }
+
+    public static String getGenresFromIds(@NonNull List<Integer> ids, @NonNull List<Genre> genres){
+        if ( ids.isEmpty() ) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getGenre(genres,ids.get(0)));
+        for (int i = 1; i<ids.size(); i++){
+            sb.append(", ");
+            sb.append(getGenre(genres,ids.get(i)));
+        }
+        return sb.toString();
+    }
 
 }
