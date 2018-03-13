@@ -2,6 +2,7 @@ package com.example.arek.movies.moviesList;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int CODE_REQUEST_FROM_DETAIL = 5;
     private int mScrollPosition;
     private Movie mDetailMovie;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements
         mPresenter = new MoviesListPresenter(mMoviesRepository);
         mPresenter.takeView(this);
         mPresenter.loadMovies(mSortMode);
-
     }
 
     @Override
@@ -152,11 +153,36 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void setOptionsIcons() {
+        MenuItem favorite = mMenu.findItem(R.id.action_menu_favorite);
+        MenuItem popular = mMenu.findItem(R.id.action_menu_popular);
+        MenuItem topRated = mMenu.findItem(R.id.action_menu_top_rated);
+        favorite.setIcon(R.drawable.ic_favorite_red_24dp);
+        popular.setIcon(R.drawable.ic_whatshot_red_24dp);
+        topRated.setIcon(R.drawable.ic_star_red_24dp);
+        switch (mSortMode) {
+            case Movie.SORT_MODE_FAVORITES: {
+                favorite.setIcon(R.drawable.ic_favorite_white_24dp);
+                break;
+            }
+            case Movie.SORT_MODE_POPULAR: {
+                popular.setIcon(R.drawable.ic_whatshot_white_24dp);
+                break;
+            }
+            case Movie.SORT_MODE_TOP_RATED: {
+                topRated.setIcon(R.drawable.ic_star_white_24dp);
+                break;
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        mMenu = menu;
      //   MenuItem itemSort = menu.findItem(R.id.action_menu_popular_top_rated);
        // setOptionSortIcon(itemSort);
+        setOptionsIcons();
         return true;
     }
 
@@ -164,13 +190,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItem = item.getItemId();
 
-//        if (menuItem == R.id.action_menu_popular_top_rated) {
-//            switchSortMode();
-//            setOptionSortIcon(item);
-//            mSwapData = true;
-//            mPresenter.loadMovies(mSortMode);
-//
-//        }
         if (menuItem == R.id.action_menu_popular){
             if ( switchSortMode(Movie.SORT_MODE_POPULAR) ){
                 mPresenter.loadMovies(mSortMode);
@@ -186,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         showTitle();
+        setOptionsIcons();
         return super.onOptionsItemSelected(item);
     }
 
