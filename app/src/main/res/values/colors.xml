@@ -11,4 +11,6 @@
 
 
     <color name="colorBackground">#000000</color>
+    <color name="colorRedLight">#FFeabbbb</color>
+    <color name="colorWhite">#FFFFFFFF</color>
 </resources>
