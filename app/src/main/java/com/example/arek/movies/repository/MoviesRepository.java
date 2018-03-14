@@ -17,6 +17,7 @@ import com.example.arek.movies.utils.DbUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -43,7 +44,6 @@ public class MoviesRepository implements MoviesDataSource {
         mMovieDbApi = movieDbApi;
     }
 
-    //TODO language settings
 
     @Override
     public Observable<List<Movie>> getMovies(int sortType, boolean cached) {
@@ -56,16 +56,17 @@ public class MoviesRepository implements MoviesDataSource {
             }
             mPage++;
         }
+        String language = Locale.getDefault().getLanguage();
         mSortType = sortType;
         Log.d(LOG_TAG,"Sort type = " + mSortType);
         Log.d(LOG_TAG,"Page = " + mPage);
 
         if ( mSortType == Movie.SORT_MODE_POPULAR ){
-            return getPopularMovies();
+            return getPopularMovies(language);
         }
 
         if ( mSortType == Movie.SORT_MODE_TOP_RATED ){
-            return getTopRatedMovies();
+            return getTopRatedMovies(language);
         }
 
         if ( mSortType == Movie.SORT_MODE_FAVORITES ){
@@ -80,8 +81,8 @@ public class MoviesRepository implements MoviesDataSource {
                 .map(movies -> setFavoritesMovies(movies,getFavoriteId()));
     }
 
-    private Observable<List<Movie>> getPopularMovies() {
-        return mMovieDbApi.getMoviesPopular(mPage,"pl")
+    private Observable<List<Movie>> getPopularMovies(String language) {
+        return mMovieDbApi.getMoviesPopular(mPage, language)
                 .subscribeOn(Schedulers.io())
                 .map(result -> result.getMovies())
                 .map(movies -> setFavoritesMovies(movies,getFavoriteId()))
@@ -91,8 +92,8 @@ public class MoviesRepository implements MoviesDataSource {
                 });
     }
 
-    private Observable<List<Movie>> getTopRatedMovies() {
-        return mMovieDbApi.getMoviesTopRated(mPage,"pl")
+    private Observable<List<Movie>> getTopRatedMovies(String language) {
+        return mMovieDbApi.getMoviesTopRated(mPage, language)
                 .subscribeOn(Schedulers.io())
                 .map(result -> result.getMovies())
                 .map(movies -> setFavoritesMovies(movies,getFavoriteId()))
@@ -132,8 +133,6 @@ public class MoviesRepository implements MoviesDataSource {
         ContentValues values = DbUtils.movieToContentValues(movie);
         AsyncQueryHandler handler = new MovieAsyncQuery(mApp.getContentResolver());
         handler.startInsert(1,null, MovieDbContract.MovieEntry.CONTENT_URI, values);
-
-       // mApp.getContentResolver().insert(MovieDbContract.MovieEntry.CONTENT_URI, values);
     }
 
     @Override
@@ -204,7 +203,8 @@ public class MoviesRepository implements MoviesDataSource {
     }
 
     private Observable<List<Genre>> getGenresFromApi(){
-        return mMovieDbApi.getGenres("pl")
+        String language = Locale.getDefault().getLanguage();
+        return mMovieDbApi.getGenres(language)
                 .subscribeOn(Schedulers.io())
                 .map(result -> result.getGenres())
                 .map(genres -> {
