@@ -194,7 +194,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void showMovies(List<Movie> movies) {
+
         if (mSwapData) {
+            mBinding.appBarLayout.setExpanded(true);
             mAdapter.swap(movies);
             mRecycler.scrollToPosition(1);
         } else {
