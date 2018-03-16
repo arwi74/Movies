@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Movies</string>
-    <string name="main_menu_popular">Popular</string>
+    <string name="main_menu_popular">popular</string>
+    <string name="main_menu_top_rated">top rated</string>
+    <string name="main_menu_favorite">favorite</string>
 
     <string name="detail_release_date_label">Release date</string>
     <string name="detail_vote_average_label">Vote average</string>
@@ -12,8 +14,6 @@
     <string name="load_error_message">Ups, we have problem with load data</string>
     <string name="detail_backdrop_description">Movie scene</string>
     <string name="detail_poster_description">Movie poster</string>
-    <string name="main_menu_top_rated">top rated</string>
-    <string name="main_menu_favorite">favorite</string>
 
     <string name="detail_videos_label">Videos</string>
     <string name="detail_reviews_label">Reviews</string>
