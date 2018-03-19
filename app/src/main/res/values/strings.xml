@@ -20,4 +20,7 @@
     <string name="detail_genres_label">Genres:</string>
     <string name="reviews_no_reviews">No reviews</string>
     <string name="videos_no_videos_text">No videos</string>
+    <string name="recycler_item_image_favorite_description">button favorite</string>
+    <string name="videos_recycler_image_description">video image</string>
+    <string name="videos_recycler_item_play_image_description">play image</string>
 </resources>

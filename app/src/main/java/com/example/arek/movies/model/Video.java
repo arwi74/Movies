@@ -1,7 +1,6 @@
 
 package com.example.arek.movies.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 public class Video {

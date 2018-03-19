@@ -26,11 +26,11 @@ public class MovieDbContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
 
-        public static final Uri buildMovieUri(long id){
+        public static  Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI,id);
         }
 
-        public static final long getIdFromUri(Uri uri){
+        public static  long getIdFromUri(Uri uri){
             return ContentUris.parseId(uri);
         }
 

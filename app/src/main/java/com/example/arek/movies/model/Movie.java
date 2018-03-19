@@ -14,7 +14,7 @@ public class Movie implements Parcelable{
     public static final int SORT_MODE_TOP_RATED = 1;
     public static final int SORT_MODE_FAVORITES = 2;
 
-    public Movie(){};
+    public Movie(){}
 
     @SerializedName("adult")
     private Boolean adult;

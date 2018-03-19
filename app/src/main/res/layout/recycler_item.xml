@@ -28,8 +28,10 @@
         android:visibility="visible"
         android:paddingTop="@dimen/recycler_item_title_padding"
         android:paddingLeft="@dimen/recycler_item_title_padding"
+        android:paddingStart="@dimen/recycler_item_title_padding"
         android:paddingBottom="@dimen/recycler_item_title_padding"
         android:paddingRight="30dp"
+        android:paddingEnd="30dp"
         android:textColor="@android:color/white"
         android:background="@drawable/gradient_background"
         />
@@ -53,7 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:contentDescription="@string/recycler_item_image_favorite_description"
         android:src="@drawable/ic_favorite_border_white_24dp"
-        android:layout_gravity="bottom|right"/>
+        android:layout_gravity="bottom|right|end"/>
 
 </FrameLayout>

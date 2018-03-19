@@ -5,14 +5,12 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.arek.movies.api.MovieDbApi;
 import com.example.arek.movies.model.Genre;
 import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.repository.db.MovieDbContract;
-import com.example.arek.movies.repository.db.MovieDbHelper;
 import com.example.arek.movies.utils.DbUtils;
 
 import java.util.ArrayList;
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.schedulers.Schedulers;
 
 /**

@@ -2,7 +2,6 @@ package com.example.arek.movies.moviesList;
 
 import com.example.arek.movies.BasePresenter;
 import com.example.arek.movies.model.Movie;
-import com.example.arek.movies.repository.MoviesRepository;
 
 import java.util.List;
 

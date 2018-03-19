@@ -2,7 +2,7 @@
 package com.example.arek.movies.model;
 
 import java.util.List;
-import javax.annotation.Generated;
+
 import com.google.gson.annotations.SerializedName;
 
 public class ReviewsResult {

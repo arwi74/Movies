@@ -3,14 +3,11 @@ package com.example.arek.movies.utils;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.arek.movies.model.Genre;
 import com.example.arek.movies.model.Movie;
-import com.example.arek.movies.repository.db.MovieDbContract;
 import com.example.arek.movies.repository.db.MovieDbContract.MovieEntry;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

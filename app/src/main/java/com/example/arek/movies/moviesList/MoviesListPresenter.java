@@ -4,12 +4,10 @@ import com.example.arek.movies.model.Movie;
 import com.example.arek.movies.repository.MoviesRepository;
 
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Arkadiusz Wilczek on 04.03.18.

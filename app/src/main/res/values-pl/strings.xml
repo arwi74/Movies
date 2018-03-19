@@ -18,8 +18,12 @@
     <string name="detail_poster_description">Plakat filmu</string>
 
     <string name="detail_videos_label">Filmy</string>
-    <string name="detail_reviews_label">Opinie</string>
+    <string name="detail_reviews_label">Recenzje</string>
     <string name="detail_genres_label">Gatunki</string>
-
+    <string name="reviews_no_reviews">Brak recenzji</string>
+    <string name="videos_no_videos_text">Brak filmów</string>
+    <string name="recycler_item_image_favorite_description">przycisk ulubiony</string>
+    <string name="videos_recycler_image_description">grafika filmu</string>
+    <string name="videos_recycler_item_play_image_description">przycisk play</string>
 
 </resources>
