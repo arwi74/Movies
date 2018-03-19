@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by Arkadiusz Wilczek on 05.03.18.
+ * DbUtils
  */
 
 public class DbUtils {

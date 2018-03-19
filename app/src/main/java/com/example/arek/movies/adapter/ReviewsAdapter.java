@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by Arkadiusz Wilczek on 10.03.18.
+ * ReviewsAdapter
  */
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {

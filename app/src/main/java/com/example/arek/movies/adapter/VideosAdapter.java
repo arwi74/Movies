@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by Arkadiusz Wilczek on 09.03.18.
+ * VideosAdapter
  */
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder> {

@@ -20,6 +20,8 @@ import io.reactivex.observers.DisposableObserver;
  */
 
 public class VideosPresenter implements VideosContract.Presenter {
+    public static final String YOUTUBE_BASE_URL_WITH_PATH = "http://www.youtube.com/watch?v=";
+    public static final String YOUTUBE_APP_URI = "vnd.youtube:";
     private VideosContract.View mView;
     private VideosRepository mRepository;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -50,9 +52,9 @@ public class VideosPresenter implements VideosContract.Presenter {
 
     @Override
     public void openVideo(Context context, String key) {
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_APP_URI + key));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + key));
+                Uri.parse(YOUTUBE_BASE_URL_WITH_PATH + key));
         try {
             context.startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {

@@ -9,7 +9,6 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 
-@SuppressWarnings("unused")
 public class Movie implements Parcelable{
     public static final int SORT_MODE_POPULAR = 0;
     public static final int SORT_MODE_TOP_RATED = 1;

@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 
 /**
  * Created by Arkadiusz Wilczek on 06.03.18.
+ * MoviesProvider
  */
 
 public class MoviesProvider extends ContentProvider {

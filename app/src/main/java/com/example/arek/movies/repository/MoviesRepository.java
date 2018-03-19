@@ -25,6 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Arkadiusz Wilczek on 03.03.18.
+ * MoviesRepository
  */
 
 public class MoviesRepository implements MoviesDataSource {

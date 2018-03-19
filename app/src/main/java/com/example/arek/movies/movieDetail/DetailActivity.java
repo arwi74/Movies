@@ -66,7 +66,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailCont
                .commit();
 
         setFloatingFavoritesButton();
-
     }
 
     private void setFloatingFavoritesButton() {

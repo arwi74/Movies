@@ -7,18 +7,20 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Arkadiusz Wilczek on 04.03.18.
+ * MoviesListPresenter
  */
 
 public class MoviesListPresenter implements MoviesListContract.Presenter {
 
     private MoviesRepository mRepository;
     private MoviesListContract.View mView;
-    private DisposableObserver<List<Movie>> mDisposableObserver;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public MoviesListPresenter(MoviesRepository repository){
         mRepository = repository;
@@ -29,26 +31,32 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
         mView = view;
     }
 
-    @Override
-    public void dropView() {
+    @Override    public void dropView() {
+        if (mCompositeDisposable!= null && !mCompositeDisposable.isDisposed()){
+            mCompositeDisposable.dispose();
+        }
         mView = null;
     }
 
     @Override
     public void loadMovies(int sortType) {
+        DisposableObserver<List<Movie>> disposable = getDisposableObserver();
         mView.showProgressBar();
         mRepository.getMovies(sortType, true)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableObserver());
+                .subscribe(disposable);
+        mCompositeDisposable.add(disposable);
     }
 
     @Override
     public void loadMoreMovies(int sortType) {
         if ( mRepository.isMoreMovies() ) {
+            DisposableObserver<List<Movie>> disposable = getDisposableObserver();
             mView.showProgressBar();
             mRepository.getMovies(sortType, false)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getDisposableObserver());
+            mCompositeDisposable.add(disposable);
         }
     }
 
@@ -89,7 +97,5 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
         };
     }
 
-    public void onMovieUpdate(Movie movie){
 
-    }
 }

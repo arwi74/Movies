@@ -7,6 +7,7 @@ import android.provider.BaseColumns;
 
 /**
  * Created by Arkadiusz Wilczek on 05.03.18.
+ * MovieDbContract
  */
 
 public class MovieDbContract {

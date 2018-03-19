@@ -9,6 +9,7 @@ import com.example.arek.movies.moviesList.MainActivity;
 
 /**
  * Created by Arkadiusz Wilczek on 14.03.18.
+ * SplashScreen
  */
 
 public class SplashScreen extends AppCompatActivity{

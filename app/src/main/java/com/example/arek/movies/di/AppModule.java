@@ -9,6 +9,7 @@ import dagger.Provides;
 
 /**
  * Created by Arkadiusz Wilczek on 03.03.18.
+ * AppModule
  */
 
 @Module
