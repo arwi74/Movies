@@ -53,7 +53,7 @@ public class MoviesListPresenter implements MoviesListContract.Presenter {
             mView.showProgressBar();
             mRepository.getMovies(sortType, false)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(getDisposableObserver());
+                    .subscribe(disposable);
             mCompositeDisposable.add(disposable);
         }
     }
