@@ -2,10 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/gradient_background"/>
+        android:drawable="@drawable/gradient_splash"/>
 
     <item>
-        <bitmap android:src="@mipmap/splash_icon"
+        <bitmap android:src="@drawable/splash_icon"
             android:gravity="center"/>
     </item>
 

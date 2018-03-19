@@ -17,11 +17,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
-    <ImageView
-        android:id="@+id/reviews_no_reviews_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/ic_broken_image_grey_24dp"
+    <TextView
+        android:id="@+id/reviews_no_reviews_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/no_item_text_size"
+        android:textColor="@color/colorAccent"
+        android:text="@string/reviews_no_reviews"
         android:layout_gravity="center"/>
 
 </FrameLayout>

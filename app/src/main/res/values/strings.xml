@@ -18,4 +18,6 @@
     <string name="detail_videos_label">Videos</string>
     <string name="detail_reviews_label">Reviews</string>
     <string name="detail_genres_label">Genres:</string>
+    <string name="reviews_no_reviews">No reviews</string>
+    <string name="videos_no_videos_text">No videos</string>
 </resources>

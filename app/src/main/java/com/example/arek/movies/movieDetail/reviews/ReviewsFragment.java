@@ -130,12 +130,12 @@ public class ReviewsFragment extends Fragment implements ReviewsContract.View{
 
     @Override
     public void showNoReviewsInfo() {
-        mBinding.reviewsNoReviewsImage.setVisibility(View.VISIBLE);
+        mBinding.reviewsNoReviewsText.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideNoReviewsInfo() {
-        mBinding.reviewsNoReviewsImage.setVisibility(View.GONE);
+        mBinding.reviewsNoReviewsText.setVisibility(View.GONE);
     }
 
     @Override
